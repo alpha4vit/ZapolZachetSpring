@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!-- groupInfo -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose group</title>
+</head>
+<body>
+<form th:method="post" th:action="@{/choosegroup}">
+  <select th:object="${group}" th:field="*{id}">
+      <option th:value="${group.getId()}" th:each="group : ${groups}" th:text="${group.getName()}"></option>
+  </select>
+    <input type="submit" value="Выбрать!">
+</form>
+
+
+<div class="data" align = "center" style=" margin-left:2%; margin-right:2%;">
+
+<p><table class="dataframe">
+
+  <thead>
+    <tr style="text-align: right;">
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">1k9393</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">1</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">2</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">3</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">4</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">5</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">6</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">7</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">8</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">9</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">10</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">11</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">12</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">13</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">14</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">15</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">16</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">17</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">18</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">19</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">20</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">21</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">22</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">23</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">24</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">25</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">26</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">27</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">28</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">29</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">30</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">31</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">32</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">33</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">34</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">35</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">36</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">37</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">38</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">39</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">40</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">41</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">42</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">43</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">44</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">45</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">46</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">47</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">48</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">49</th>
+<th style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">50</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th style = "background-color: #E2EFDA;font-family: Century Gothic, sans-serif;font-size: medium;text-align: left;padding: 0px 20px 0px 0px;width: auto">Гуринович Р.Д.</th>
+</tr>
+<tr>
+<th style = "background-color: #E2EFDA;font-family: Century Gothic, sans-serif;font-size: medium;text-align: left;padding: 0px 20px 0px 0px;width: auto">Малышев А.П.</th>
+</tr>
+<tr>
+<th style = "background-color: #E2EFDA;font-family: Century Gothic, sans-serif;font-size: medium;text-align: left;padding: 0px 20px 0px 0px;width: auto">Князева К.В.</th>
+</tr>
+</tbody>
+
+</table>
+</p>
+</div>
+</body>
+</html>

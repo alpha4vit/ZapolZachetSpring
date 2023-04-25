@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Group Info</title>
+</head>
+<body>
+<div>
+    <h3 th:text="${group.getName()}"></h3>
+    <form th:method="post" th:action="@{/admin/{group_id}/addStudent(group_id=${group.getId()})}" th:object="${newStudent}">
+        <label for="fio">Введите имя: </label>
+        <input type="text" th:field="*{fio}" id="fio"/>
+        <div style="color: darkred" th:if="${#fields.hasErrors('fio')}" th:errors="*{fio}"></div>
+        <br/>
+        <input type="submit" value="Сохранить!"/>
+    </form>
+    <div th:each="student : ${group.getStudents()}" >
+        <p th:text="${student.getFio()}"></p>
+        <form th:method="post" th:action="@{/admin/{group_id}/{student_id}/deleteStudent(group_id=${group.getId()}, student_id=${student.getId()})}">
+            <button type="submit">Удалить!</button>
+        </form>
+        <form th:action="@{/admin/{group_id}/{student_id}/editStudent(group_id=${group.getId()}, student_id=${student.getId()})}">
+            <button type="submit">Изменить</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

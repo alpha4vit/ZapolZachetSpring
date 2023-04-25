@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!-- groupInfo -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose group</title>
+</head>
+<body>
+<form th:method="post" th:action="@{/choosegroup}">
+  <select th:object="${group}" th:field="*{id}">
+      <option th:value="${group.getId()}" th:each="group : ${groups}" th:text="${group.getName()}"></option>
+  </select>
+    <input type="submit" value="Выбрать!">
+</form>
+
+
+<div class="data" align = "center" style=" margin-left:2%; margin-right:2%;">
+
+<p><table class="dataframe">
+
+  <thead>
+    <tr style="text-align: right;">
