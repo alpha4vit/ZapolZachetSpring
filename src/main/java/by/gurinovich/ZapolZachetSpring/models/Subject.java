@@ -15,6 +15,10 @@ public class Subject {
     @NotNull
     private String title;
 
+    @Column(name = "quantoflabs")
+    @NotNull
+    private Integer quantOfLabs;
+
     public Subject() {}
 
     public int getId() {
@@ -31,5 +35,13 @@ public class Subject {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Integer getQuantOfLabs() {
+        return quantOfLabs;
+    }
+
+    public void setQuantOfLabs(Integer quantOfLabs) {
+        this.quantOfLabs = quantOfLabs;
     }
 }

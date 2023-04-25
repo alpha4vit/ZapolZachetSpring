@@ -1,11 +1,12 @@
 package by.gurinovich.ZapolZachetSpring.models;
 
+import by.gurinovich.ZapolZachetSpring.services.SubjectService;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.lang.annotation.Target;
 import java.util.List;
 
 @Entity
@@ -29,8 +30,6 @@ public class Student {
     @OneToMany(mappedBy = "student")
     private List<Zachet> zachety;
 
-    public Student() {
-    }
 
     public int getId() {
         return id;
@@ -63,4 +62,5 @@ public class Student {
     public void setZachety(List<Zachet> zachety) {
         this.zachety = zachety;
     }
+
 }

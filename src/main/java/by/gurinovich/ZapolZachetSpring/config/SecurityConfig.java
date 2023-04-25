@@ -27,7 +27,7 @@ public class SecurityConfig {
     public SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/admin/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()

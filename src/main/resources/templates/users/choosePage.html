@@ -6,10 +6,20 @@
     <title>Choose group</title>
 </head>
 <body>
+<<<<<<< HEAD
 <form th:method="post" th:action="@{/choosegroup}">
   <select th:object="${group}" th:field="*{id}">
       <option th:value="${group.getId()}" th:each="group : ${groups}" th:text="${group.getName()}"></option>
   </select>
+=======
+<form th:object="${groupANDsubject}" th:method="post" th:action="@{/choosegroup}">
+  <select th:field="${groupANDsubject.group}">
+      <option th:value="${group.id}" th:each="group : ${groups}" th:text="${group.getName()}"></option>
+  </select>
+   <select th:field="${groupANDsubject.subject}" >
+       <option th:value="${subject.id}" th:each="subject: ${subjects}" th:text="${subject.getTitle()}"></option>
+   </select>
+>>>>>>> 154bc78 (ready with thymeleaf, autogen zachets)
     <input type="submit" value="Выбрать!">
 </form>
 </body>

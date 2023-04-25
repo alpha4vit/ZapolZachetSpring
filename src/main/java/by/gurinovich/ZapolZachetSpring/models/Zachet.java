@@ -19,11 +19,20 @@ public class Zachet {
     @JoinColumn(name = "subject_id", referencedColumnName = "id")
     private Subject subject;
 
-    @Column(name = "labanumber")
-    @Min(value = 1)
-    private Integer labaNumber;
+    @Column(name = "value")
+    private String value;
+
+    @Column(name = "number")
+    private int number;
 
     public Zachet() {
+    }
+
+    public Zachet(Student student, Subject subject, String value, int number) {
+        this.student = student;
+        this.subject = subject;
+        this.value = value;
+        this.number = number;
     }
 
     public int getId() {
@@ -50,11 +59,19 @@ public class Zachet {
         this.subject = subject;
     }
 
-    public Integer getLabaNumber() {
-        return labaNumber;
+    public String getValue() {
+        return value;
     }
 
-    public void setLabaNumber(Integer labaNumber) {
-        this.labaNumber = labaNumber;
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 }
