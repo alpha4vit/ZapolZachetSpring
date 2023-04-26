@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Group Info</title>
+</head>
+<body>
+<h3 th:text="${group.getName() + ', ' + subject.getTitle()}"></h3>
+<form th:object="${groupANDsubject}" th:action="@{/teacher/group}">
+    <select th:field="${groupANDsubject.group}">
+        <option th:value="${group.id}" th:each="group : ${groups}" th:text="${group.getName()}"></option>
+    </select>
+    <select th:field="${groupANDsubject.subject}" >
+        <option th:value="${subject.id}" th:each="subject: ${subjects}" th:text="${subject.getTitle()}"></option>
+    </select>
+    <input type="submit" value="Выбрать!">
+</form>
+<br/>
+<br/>
+<form th:object="${zachetModel}" th:action="@{/teacher/group/newZachet}" th:method="patch">
+    <input type="hidden" th:name="group_id" th:value="${groupANDsubject.group.getId()}"/>
+    <input type="hidden" th:name="subject_id" th:value="${groupANDsubject.subject.getId()}"/>
+    <select th:field="${zachetModel.student}">
+        <option th:value="${student.id}" th:each="student : ${students}" th:text="${student.getFio()}"></option>
+    </select>
+    <br/>
+    <label for="num">Введите номер лабораторной работы: </label>
+    <input type="text" th:field="*{number}" id="num"/>
+    <div style="color: darkred" th:if="${#fields.hasErrors('number')}" th:errors="*{number}"></div>
+    <br/>
+    <label for="value">Введите оценку (+ / -)</label>
+    <input type="text" th:field="*{value}" id="value"/>
+    <div style="color: darkred" th:if="${#fields.hasErrors('value')}" th:errors="*{value}"></div>
+    <br/>
+    <input type="submit" value="Сохранить!"/>
+</form>
+
+<div class="data" align = "center" style=" margin-left:2%; margin-right:2%;">
+
+    <p><table class="dataframe">
+
+    <thead>
+    <tr style="text-align: right;">
+        <th th:text="${groupANDsubject.getGroup().getName()+', '+groupANDsubject.getSubject().getTitle()}" style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto"></th>
+        <th th:each="num : ${#numbers.sequence(1, subject.getQuantOfLabs())}" th:text="${num}" style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">1</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="student : ${students}">
+        <th th:text="${student.getFio()}" style = "background-color: #E2EFDA;font-family: Century Gothic, sans-serif;font-size: medium;text-align: left;padding: 0px 20px 0px 0px;width: auto"></th>
+        <td th:each="zachet : ${zachetService.findByStudentAndSubject(student, groupANDsubject.getSubject())}" th:text="${zachet.getValue()}" style = "background-color: #E2EFDA;font-family: Century Gothic, sans-serif;font-size: medium;text-align: left;padding: 0px 20px 0px 0px;width: auto"></td>
+    </tr>
+
+    </tbody>
+</table>
+    </p>
+
+</div>
+
+</body>
+</html>

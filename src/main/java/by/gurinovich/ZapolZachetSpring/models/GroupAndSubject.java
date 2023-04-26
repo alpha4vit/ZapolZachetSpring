@@ -8,6 +8,11 @@ public class GroupAndSubject {
         return subject;
     }
 
+    public GroupAndSubject(Group group, Subject subject) {
+        this.group = group;
+        this.subject = subject;
+    }
+
     public void setSubject(Subject subject) {
         this.subject = subject;
     }

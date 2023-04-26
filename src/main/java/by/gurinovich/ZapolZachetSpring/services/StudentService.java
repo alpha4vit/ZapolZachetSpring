@@ -4,6 +4,7 @@ import by.gurinovich.ZapolZachetSpring.models.Student;
 import by.gurinovich.ZapolZachetSpring.models.Subject;
 import by.gurinovich.ZapolZachetSpring.models.Zachet;
 import by.gurinovich.ZapolZachetSpring.repositories.StudentRepository;
+import by.gurinovich.ZapolZachetSpring.repositories.ZachetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,14 +17,14 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final GroupService groupService;
     private final SubjectService subjectService;
-    private final ZachetService zachetService;
+    private final ZachetRepository zachetRepository;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository, GroupService groupService, SubjectService subjectService, ZachetService zachetService) {
+    public StudentService(StudentRepository studentRepository, GroupService groupService, SubjectService subjectService, ZachetRepository zachetRepository) {
         this.studentRepository = studentRepository;
         this.groupService = groupService;
         this.subjectService = subjectService;
-        this.zachetService = zachetService;
+        this.zachetRepository = zachetRepository;
     }
 
     @Transactional
@@ -43,7 +44,7 @@ public class StudentService {
         List<Subject> subjects = subjectService.getSubjects();
         for (Subject subject : subjects){
             for (int i =1; i <= subject.getQuantOfLabs(); ++i){
-                zachetService.save(new Zachet(studentRepository.findByFio(student.getFio()), subject, "-", i));
+                zachetRepository.save(new Zachet(studentRepository.findByFio(student.getFio()), subject, "-", i));
             }
         }
     }

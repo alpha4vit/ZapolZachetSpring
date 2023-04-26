@@ -2,6 +2,7 @@ package by.gurinovich.ZapolZachetSpring.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "zachety")
@@ -20,9 +21,11 @@ public class Zachet {
     private Subject subject;
 
     @Column(name = "value")
+    @Pattern(regexp = "[+-]", message = "Значение должно быть в формате \"+\" / \"-\"")
     private String value;
 
     @Column(name = "number")
+    @Min(value = 1, message = "Номер лабораторной должен быть больше 0")
     private int number;
 
     public Zachet() {
@@ -33,6 +36,12 @@ public class Zachet {
         this.subject = subject;
         this.value = value;
         this.number = number;
+    }
+
+
+
+    public Zachet(Subject subject) {
+        this.subject = subject;
     }
 
     public int getId() {

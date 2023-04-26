@@ -29,7 +29,7 @@ public class AdminWorkWithGroups {
         this.studentValidator = studentValidator;
     }
 
-    @RequestMapping()
+    @GetMapping()
     public String showAdminPage(Model model, @ModelAttribute("group") Group group){
         model.addAttribute("groups", groupService.getGroups());
         return "admin/adminMainPage";
@@ -52,7 +52,7 @@ public class AdminWorkWithGroups {
         return "redirect:/admin";
     }
 
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     public String getInfoAboutGroup(@PathVariable("id") int id, Model model, @ModelAttribute("newStudent") Student student){
         model.addAttribute("group", groupService.findById(id));
         return "admin/groupInfo";

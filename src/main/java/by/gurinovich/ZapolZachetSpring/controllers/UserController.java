@@ -45,8 +45,6 @@ public class UserController {
     public String showToTable(@ModelAttribute("groupANDsubject") GroupAndSubject groupAndSubject, Model model) throws IOException {
         Group groupInfo = groupService.findById(groupAndSubject.getGroup().getId());
         Subject subject = subjectService.findById(groupAndSubject.getSubject().getId());
-        System.out.println(groupAndSubject.getSubject().getId());
-        System.out.println(groupInfo.getId());
 
         model.addAttribute("groups", groupService.getGroups())
                 .addAttribute("subjects", subjectService.getSubjects())

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<!-- choosePageEmptyInfo -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose group</title>
+</head>
+<body>
+<form th:object="${groupANDsubject}" th:action="@{/teacher/group}">
+    <select th:field="${groupANDsubject.group}">
+        <option th:value="${group.id}" th:each="group : ${groups}" th:text="${group.getName()}"></option>
+    </select>
+    <select th:field="${groupANDsubject.subject}" >
+        <option th:value="${subject.id}" th:each="subject: ${subjects}" th:text="${subject.getTitle()}"></option>
+    </select>
+    <input type="submit" value="Выбрать!">
+</form>
+</body>
+</html>
