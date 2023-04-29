@@ -18,12 +18,15 @@ public class User {
     private String name;
 
     @Column(name = "password")
-    @Size(min = 2, max = 50, message = "Пароль должен содержать от 2 до 50 символов")
+    @Size(min = 2, message = "Пароль должен содержать от 2 символов")
     private String password;
 
     @Column(name = "email")
     @Email(message = "Введенная почта некорректная")
     private String email;
+
+    @Column(name = "role")
+    private String role;
 
     public int getId() {
         return id;
@@ -57,6 +60,14 @@ public class User {
         this.email = email;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -64,6 +75,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 }

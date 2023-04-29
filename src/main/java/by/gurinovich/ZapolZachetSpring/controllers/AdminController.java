@@ -2,8 +2,10 @@ package by.gurinovich.ZapolZachetSpring.controllers;
 
 import by.gurinovich.ZapolZachetSpring.models.Group;
 import by.gurinovich.ZapolZachetSpring.models.Student;
+import by.gurinovich.ZapolZachetSpring.models.auth.User;
 import by.gurinovich.ZapolZachetSpring.services.GroupService;
 import by.gurinovich.ZapolZachetSpring.services.StudentService;
+import by.gurinovich.ZapolZachetSpring.services.auth.UserDetailsService;
 import by.gurinovich.ZapolZachetSpring.utils.validotors.GroupValidator;
 import by.gurinovich.ZapolZachetSpring.utils.validotors.StudentValidator;
 import jakarta.validation.Valid;
@@ -15,18 +17,21 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin")
-public class AdminWorkWithGroups {
+public class AdminController {
     private final GroupService groupService;
     private final GroupValidator groupValidator;
     private final StudentService studentService;
     private final StudentValidator studentValidator;
+    private final UserDetailsService userDetailsService;
+
 
     @Autowired
-    public AdminWorkWithGroups(GroupService groupService, GroupValidator groupValidator, StudentService studentService, StudentValidator studentValidator) {
+    public AdminController(GroupService groupService, GroupValidator groupValidator, StudentService studentService, StudentValidator studentValidator, UserDetailsService userDetailsService) {
         this.groupService = groupService;
         this.groupValidator = groupValidator;
         this.studentService = studentService;
         this.studentValidator = studentValidator;
+        this.userDetailsService = userDetailsService;
     }
 
     @GetMapping()
@@ -93,4 +98,40 @@ public class AdminWorkWithGroups {
         return String.format("redirect:/admin/%d", group_id);
     }
 
+
+    @GetMapping("/users")
+    public String getUsers(Model model){
+        model.addAttribute("users", userDetailsService.getAllUsers().stream().sorted((o1, o2) -> Integer.compare(o1.getId(), o2.getId())))
+                .addAttribute("search", "");
+        return "admin/usersPage";
+    }
+
+
+    @PostMapping("/users")
+    public String getSearchUsers(@RequestParam("search") String search, Model model){
+        model.addAttribute("users", userDetailsService.findByNameStartingWith(search))
+                .addAttribute("search", search);
+        return "admin/usersPage";
+    }
+
+
+    @GetMapping("/users/{id}")
+    public String showUserInfo(@PathVariable("id") int id, Model model){
+        model.addAttribute("user", userDetailsService.findById(id))
+                .addAttribute("roles", Roles.values());
+        return "admin/userInfoPage";
+    }
+
+
+    @PatchMapping("/users/{id}/newRole")
+    public String selectUserRole(@PathVariable("id") int id, @ModelAttribute("user") User user){
+        userDetailsService.update(user, id);
+        return String.format("redirect:/admin/users/%d", user.getId());
+    }
+
+}
+enum Roles{
+    ROLE_USER,
+    ROLE_TEACHER,
+    ROLE_ADMIN
 }

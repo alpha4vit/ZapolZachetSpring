@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div>
+  <h2 th:text="${user.getId()+', '+user.getName()+', '+user.getEmail()}"></h2>
+  <h2 th:text="${user.getRole().substring(5)}"></h2>
+</div>
+<form th:method="patch" th:object="${user}" th:action="@{/admin/users/{id}/newRole(id=${user.getId()})}">
+    <select th:field="${user.role}">
+        <option th:value="${role}" th:each="role : ${roles}" th:text="${role}"></option>
+    </select>
+    <input type="submit" value="Сохранить роль!">
+</form>
+</body>
+</html>

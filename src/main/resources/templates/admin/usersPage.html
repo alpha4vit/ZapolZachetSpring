@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+<form method="post" th:action="@{/admin/users}">
+    <label for="search">Введите поисковый запрос </label>
+    <input th:value="${search}" type="text" name="search" id="search"/>
+    <input type="submit" value="Поиск"/>
+</form>
+
+<div th:each="user : ${users}">
+  <a th:text="${user.getId()+', '+user.getName()}" th:href="@{/admin/users/{id}(id=${user.getId()})}"></a>
+  <br/>
+</div>
+</body>
+</html>
