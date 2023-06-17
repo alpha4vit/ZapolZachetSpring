@@ -1,10 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/style.css}">
+
+    <title>Group Info</title>
 </head>
 <body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="/admin/users">Пользователи</a></li>
+            <li><a href="/admin">Группы</a></li>
+
+        </ul>
+    </nav>
+    <div class="request">
+        <a href="#">Отправить запрос</a>
+    </div>
+</header>
 <form th:method="post" th:object="${group}" th:action = "@{/admin/createNewGroup}">
     <label for="name">Введите название группы: </label>
     <input type="text" th:field="*{name}" id="name"/>

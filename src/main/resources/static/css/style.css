@@ -1,9 +1,19 @@
+body {
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    color: #333;
+    line-height: 1.5;
+}
+
 /* show table */
 thead th {
     position: -webkit-sticky; /* for Safari */
     position: sticky;
     top: 0;
     height: 15%;
+    text-align: center; /* Выравнивание текста по горизонтали */
+    vertical-align: middle; /* Выравнивание текста по вертикали */
+    max-width: 200px; /* Пример ограничения ширины ячейки */
 }
 
 tbody th {
@@ -11,26 +21,123 @@ tbody th {
     position: sticky;
     height: 15%;
     left: 0;
+    text-align: center; /* Выравнивание текста по горизонтали */
+    vertical-align: middle; /* Выравнивание текста по вертикали */
+    max-width: 200px; /* Пример ограничения ширины ячейки */
 }
+
 thead th:first-child {
     left: 0;
     z-index: 1;
     height: 15%;
+    text-align: center; /* Выравнивание текста по горизонтали */
+    vertical-align: middle; /* Выравнивание текста по вертикали */
+    max-width: 200px; /* Пример ограничения ширины ячейки */
 }
-
 
 .data {
     max-width: 100%;
-    height:100vh;
+    height: 100vh;
     overflow: scroll;
 }
 
-thead th:first-child {
-    left: 0;
-    z-index: 1;
-    height: 15%;
+.dataframe {
+
 }
 
-.dataframe {
-    height:100vh;
+/* оформелние форм*/
+form{
+    margin-top: 20px;
+}
+select, input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f2f2f2;
+    color: #333;
+    width: 200px;
+    margin-bottom: 10px;
+}
+
+button,
+input[type="submit"] {
+    display: block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #5cb85c;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Плавное изменение свойств */
+}
+
+/* При наведении курсора на кнопку */
+button:hover,
+input[type="submit"]:hover {
+    background-color: #449d44;
+    transform: scale(1.05); /* Увеличение размера на 10% */
+    opacity: 0.8; /* Увеличение прозрачности на 0.8 */
+}
+
+/* При нажатии на кнопку */
+button:active,
+input[type="submit"]:active {
+    background-color: #398439;
+}
+
+/* header */
+header {
+    background-color: #5cb85c;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 10px;
+}
+
+nav ul li {
+    text-align: center;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 5px;
+    transition: color 0.3s ease;
+    font-size: 20px;
+}
+
+nav ul li a:hover {
+    color: #336633;
+}
+
+.request a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #398439;
+}
+
+.request a:hover {
+    background-color: #336633;
 }

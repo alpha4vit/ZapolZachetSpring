@@ -1,15 +1,22 @@
 package by.gurinovich.ZapolZachetSpring.config;
 
+import by.gurinovich.ZapolZachetSpring.security.UserDetails;
 import by.gurinovich.ZapolZachetSpring.services.auth.UserDetailsService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -35,7 +42,19 @@ public class SecurityConfig {
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/choosegroup", true)
+                .successHandler(new AuthenticationSuccessHandler() {
+                    @Override
+                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                        String role  = userDetails.getUser().getRole();
+                        if (role.equals("ROLE_USER"))
+                            response.sendRedirect("/choosegroup");
+                        else if (role.equals("ROLE_TEACHER"))
+                            response.sendRedirect("/teacher");
+                        else if (role.equals("ROLE_ADMIN"))
+                            response.sendRedirect("/admin");
+                    }
+                })
                 .failureUrl("/auth/login?error")
                 .and()
                 .logout()

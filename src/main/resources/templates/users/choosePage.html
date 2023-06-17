@@ -1,11 +1,23 @@
-<!DOCTYPE html>
-<!-- choosePageEmptyInfo -->
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Choose group</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="/teacher">Заполнение</a></li>
+            <li><a href="/choosegroup">Просмотр ведомости</a></li>
+        </ul>
+    </nav>
+    <div class="request">
+        <a href="#">Отправить запрос</a>
+    </div>
+</header>
 <form th:object="${groupANDsubject}" th:method="post" th:action="@{/choosegroup}">
   <select th:field="${groupANDsubject.group}">
       <option th:value="${group.id}" th:each="group : ${groups}" th:text="${group.getName()}"></option>
@@ -13,7 +25,7 @@
    <select th:field="${groupANDsubject.subject}" >
        <option th:value="${subject.id}" th:each="subject: ${subjects}" th:text="${subject.getTitle()}"></option>
    </select>
-    <input type="submit" value="Выбрать!">
+    <input type="submit" value="Выбрать!"/>
 </form>
 </body>
 </html>
