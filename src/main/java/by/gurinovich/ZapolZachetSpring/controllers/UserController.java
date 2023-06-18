@@ -4,6 +4,7 @@ import by.gurinovich.ZapolZachetSpring.models.Group;
 import by.gurinovich.ZapolZachetSpring.models.GroupAndSubject;
 import by.gurinovich.ZapolZachetSpring.models.Subject;
 import by.gurinovich.ZapolZachetSpring.models.auth.User;
+import by.gurinovich.ZapolZachetSpring.security.UserDetails;
 import by.gurinovich.ZapolZachetSpring.services.GroupService;
 import by.gurinovich.ZapolZachetSpring.services.SubjectService;
 import by.gurinovich.ZapolZachetSpring.services.ZachetService;
@@ -11,18 +12,16 @@ import by.gurinovich.ZapolZachetSpring.services.auth.RegistrationService;
 import by.gurinovich.ZapolZachetSpring.utils.validotors.UserValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
 @Controller
-
 @RequestMapping()
 public class UserController {
     private final GroupService groupService;
@@ -42,8 +41,14 @@ public class UserController {
 
     @GetMapping("/choosegroup")
     public String chooseGroup(Model model, @ModelAttribute("groupANDsubject") GroupAndSubject groupAndSubject){
+        UserDetails user = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails){
+            user = (UserDetails) principal;
+        }
         model.addAttribute("groups", groupService.getGroups())
-                .addAttribute("subjects", subjectService.getSubjects());
+                .addAttribute("subjects", subjectService.getSubjects())
+                .addAttribute("current_user", user);
         return "users/choosePage";
     }
 
@@ -74,8 +79,17 @@ public class UserController {
             bindingResult.getAllErrors().forEach(System.out::println);
             return "users/registrationPage";
         }
-        System.out.println("2");
         registrationService.register(user);
         return "redirect:/login";
+    }
+
+    @GetMapping("/profile")
+    public String showUserProfile(Model model){
+        UserDetails user = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails)
+            user = (UserDetails) principal;
+        model.addAttribute("user", user);
+        return "general/profile";
     }
 }

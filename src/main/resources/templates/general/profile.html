@@ -20,14 +20,5 @@
         <a class="a_header" href="/logout">Выйти</a>
     </div>
 </header>
-<form th:object="${groupANDsubject}" th:action="@{/teacher/group}">
-    <select th:field="${groupANDsubject.group}">
-        <option th:value="${group.id}" th:each="group : ${groups}" th:text="${group.getName()}"></option>
-    </select>
-    <select th:field="${groupANDsubject.subject}" >
-        <option th:value="${subject.id}" th:each="subject: ${subjects}" th:text="${subject.getTitle()}"></option>
-    </select>
-    <input type="submit" value="Выбрать!">
-</form>
 </body>
 </html>

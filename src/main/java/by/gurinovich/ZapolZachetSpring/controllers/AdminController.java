@@ -3,6 +3,7 @@ package by.gurinovich.ZapolZachetSpring.controllers;
 import by.gurinovich.ZapolZachetSpring.models.Group;
 import by.gurinovich.ZapolZachetSpring.models.Student;
 import by.gurinovich.ZapolZachetSpring.models.auth.User;
+import by.gurinovich.ZapolZachetSpring.security.UserDetails;
 import by.gurinovich.ZapolZachetSpring.services.GroupService;
 import by.gurinovich.ZapolZachetSpring.services.StudentService;
 import by.gurinovich.ZapolZachetSpring.services.auth.UserDetailsService;
@@ -10,6 +11,7 @@ import by.gurinovich.ZapolZachetSpring.utils.validotors.GroupValidator;
 import by.gurinovich.ZapolZachetSpring.utils.validotors.StudentValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,7 +38,14 @@ public class AdminController {
 
     @GetMapping()
     public String showAdminPage(Model model, @ModelAttribute("group") Group group){
-        model.addAttribute("groups", groupService.getGroups());
+        UserDetails user = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails){
+            user = (UserDetails) principal;
+        }
+        model
+                .addAttribute("groups", groupService.getGroups())
+                .addAttribute("current_user", user);
         return "admin/adminMainPage";
     }
 
@@ -44,7 +53,7 @@ public class AdminController {
     public String deleteGroup(@PathVariable("id") int id){
         groupService.deleteById(id);
         return "redirect:/admin";
-    }
+}
 
     @PostMapping("/createNewGroup")
     public String createNewGroup(@ModelAttribute("group") @Valid Group group, BindingResult bindingResult, Model model){
@@ -59,7 +68,14 @@ public class AdminController {
 
     @GetMapping("/{id}")
     public String getInfoAboutGroup(@PathVariable("id") int id, Model model, @ModelAttribute("newStudent") Student student){
-        model.addAttribute("group", groupService.findById(id));
+        UserDetails user = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails){
+            user = (UserDetails) principal;
+        }
+        model
+                .addAttribute("group", groupService.findById(id))
+                .addAttribute("current_user", user);
         return "admin/groupInfo";
     }
 
@@ -83,9 +99,15 @@ public class AdminController {
 
     @GetMapping("/{group_id}/{student_id}/editStudent")
     public String editStudentPage(@PathVariable("group_id") int group_id, @PathVariable("student_id") int student_id, Model model){
+        UserDetails user = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails){
+            user = (UserDetails) principal;
+        }
         model.addAttribute("group_id", group_id)
                 .addAttribute("student", studentService.findById(student_id))
-                .addAttribute("student_id", student_id);
+                .addAttribute("student_id", student_id)
+                .addAttribute("current_user", user);
         return "admin/studentEditPage";
     }
 
@@ -101,8 +123,14 @@ public class AdminController {
 
     @GetMapping("/users")
     public String getUsers(Model model){
+        UserDetails user = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails){
+            user = (UserDetails) principal;
+        }
         model.addAttribute("users", userDetailsService.getAllUsers().stream().sorted((o1, o2) -> Integer.compare(o1.getId(), o2.getId())))
-                .addAttribute("search", "");
+                .addAttribute("search", "")
+                .addAttribute("current_user", user);
         return "admin/usersPage";
     }
 
@@ -117,8 +145,14 @@ public class AdminController {
 
     @GetMapping("/users/{id}")
     public String showUserInfo(@PathVariable("id") int id, Model model){
+        UserDetails user = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails){
+            user = (UserDetails) principal;
+        }
         model.addAttribute("user", userDetailsService.findById(id))
-                .addAttribute("roles", Roles.values());
+                .addAttribute("roles", Roles.values())
+                .addAttribute("current_user", user);
         return "admin/userInfoPage";
     }
 

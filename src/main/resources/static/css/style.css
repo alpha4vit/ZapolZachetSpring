@@ -117,7 +117,8 @@ nav ul li {
     text-align: center;
 }
 
-nav ul li a {
+
+.a_header {
     color: #fff;
     text-decoration: none;
     padding: 10px;
@@ -126,8 +127,13 @@ nav ul li a {
     font-size: 20px;
 }
 
-nav ul li a:hover {
+.a_header:hover{
     color: #336633;
+}
+.right-content {
+    margin-left: auto;
+    font-size: 18px; /* Пример размера шрифта */
+    color: #333; /* Пример цвета текста */
 }
 
 .request a {

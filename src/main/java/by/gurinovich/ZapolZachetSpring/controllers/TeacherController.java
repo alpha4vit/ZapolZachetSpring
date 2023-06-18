@@ -1,6 +1,7 @@
 package by.gurinovich.ZapolZachetSpring.controllers;
 
 import by.gurinovich.ZapolZachetSpring.models.*;
+import by.gurinovich.ZapolZachetSpring.security.UserDetails;
 import by.gurinovich.ZapolZachetSpring.services.GroupService;
 import by.gurinovich.ZapolZachetSpring.services.StudentService;
 import by.gurinovich.ZapolZachetSpring.services.SubjectService;
@@ -8,6 +9,9 @@ import by.gurinovich.ZapolZachetSpring.services.ZachetService;
 import by.gurinovich.ZapolZachetSpring.utils.validotors.ZachetValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,8 +37,14 @@ public class TeacherController {
 
     @GetMapping()
     public String chooseGroupPage(Model model, @ModelAttribute("groupANDsubject") GroupAndSubject groupAndSubject) {
+        UserDetails user = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails){
+            user = (UserDetails) principal;
+        }
         model.addAttribute("groups", groupService.getGroups())
-                .addAttribute("subjects", subjectService.getSubjects());
+                .addAttribute("subjects", subjectService.getSubjects())
+                .addAttribute("user", user);
         return "teachers/choosePage";
     }
 
@@ -42,13 +52,19 @@ public class TeacherController {
     public String showGroup(@ModelAttribute("groupANDsubject") GroupAndSubject groupAndSubject, Model model){
         Group group = groupService.findById(groupAndSubject.getGroup().getId());
         Subject subject = subjectService.findById(groupAndSubject.getSubject().getId());
+        UserDetails user = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails){
+            user = (UserDetails) principal;
+        }
         model.addAttribute("group", group)
                 .addAttribute("subject", subject)
                 .addAttribute("students", group.getStudents())
                 .addAttribute("groups", groupService.getGroups())
                 .addAttribute("subjects", subjectService.getSubjects())
                 .addAttribute("zachetModel", new ZachetModel())
-                .addAttribute("zachetService", zachetService);;
+                .addAttribute("zachetService", zachetService)
+                .addAttribute("current_user", user);
         return "teachers/groupInfo";
     }
 
