@@ -54,15 +54,20 @@ public class UserController {
 
     @PostMapping("/choosegroup")
     public String showToTable(@ModelAttribute("groupANDsubject") GroupAndSubject groupAndSubject, Model model) throws IOException {
+        UserDetails user = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails){
+            user = (UserDetails) principal;
+        }
         Group groupInfo = groupService.findById(groupAndSubject.getGroup().getId());
         Subject subject = subjectService.findById(groupAndSubject.getSubject().getId());
-
         model.addAttribute("groups", groupService.getGroups())
                 .addAttribute("subjects", subjectService.getSubjects())
                 .addAttribute("groupInfo", groupInfo)
                 .addAttribute("students", groupInfo.getStudents())
                 .addAttribute("quantOfLabas", subject.getQuantOfLabs())
-                .addAttribute("zachetService", zachetService);
+                .addAttribute("zachetService", zachetService)
+                .addAttribute("current_user", user);
         return "users/showGroupInfo";
     }
 

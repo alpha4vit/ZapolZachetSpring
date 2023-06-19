@@ -16,8 +16,16 @@
             <li><a class="a_header" href="/choosegroup">Просмотр ведомости</a></li>
         </ul>
     </nav>
-    <div class="right-content">
-        <a class="a_header" href="/logout">Выйти</a>
+    <div th:if="${current_user != null}" class="right-content">
+        <nav>
+            <ul>
+                <li th:text="${current_user.getUsername()}">username</li>
+                <li><a class="a_header" href="/logout">Выйти</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div th:if="${current_user == null}" class="right-content">
+        <a class="a_header" href="/login">Войти</a>
     </div>
 </header>
 <form th:object="${groupANDsubject}" th:method="post" th:action="@{/choosegroup}">
