@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -49,4 +50,41 @@ public class Group {
     public void setStudents(List<Student> students) {
         this.students = students;
     }
+
+    public List<Student> selectStudentsByFilter(TableFilter filter, Subject subject){
+        List<Student> selection = new ArrayList<>();
+        if (filter.getLabaNum() != null  && filter.getSurnameSearch() != null && !filter.getSurnameSearch().equals("")){
+            for (Student st : this.students){
+                List<Zachet> zachets = st.getZachety();
+                for (int i =0; i < zachets.size(); ++i) {
+                    if (zachets.get(i).getStudent().getFio().startsWith(filter.getSurnameSearch()) && zachets.get(i).getValue().equalsIgnoreCase("-") && filter.getLabaNum() == zachets.get(i).getNumber() && zachets.get(i).getSubject().equals(subject)) {
+                        selection.add(st);
+                        break;
+                    }
+                }
+            }
+        }
+        else if (filter.getSurnameSearch() != null && !filter.getSurnameSearch().equals("")) {
+            for (Student st : this.students) {
+                if (st.getFio().startsWith(filter.getSurnameSearch()))
+                    selection.add(st);
+            }
+        }
+        else if (filter.getLabaNum() != null){
+            for (Student st : this.students){
+                List<Zachet> zachets = st.getZachety();
+                for (int i =0; i < zachets.size(); ++i) {
+                    if (zachets.get(i).getValue().equalsIgnoreCase("-") && filter.getLabaNum() == zachets.get(i).getNumber() && zachets.get(i).getSubject().equals(subject)) {
+                        selection.add(st);
+                        break;
+                    }
+                }
+            }
+        }
+        else
+            return null;
+        return selection;
+    }
+
+
 }

@@ -9,6 +9,7 @@ import by.gurinovich.ZapolZachetSpring.services.ZachetService;
 import by.gurinovich.ZapolZachetSpring.utils.validotors.ZachetValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/teacher")
@@ -54,6 +58,7 @@ public class TeacherController {
         Subject subject = subjectService.findById(groupAndSubject.getSubject().getId());
         UserDetails user = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        TableFilter tableFilter = new TableFilter();
         if (principal instanceof UserDetails){
             user = (UserDetails) principal;
         }
@@ -64,12 +69,15 @@ public class TeacherController {
                 .addAttribute("subjects", subjectService.getSubjects())
                 .addAttribute("zachetModel", new ZachetModel())
                 .addAttribute("zachetService", zachetService)
-                .addAttribute("current_user", user);
+                .addAttribute("current_user", user)
+                .addAttribute("tableFilter", tableFilter);
         return "teachers/groupInfo";
     }
 
     @PatchMapping("/group/newZachet")
-    public String newZachet(@RequestParam("group_id") Integer group_id, @RequestParam("subject_id") Integer subject_id, @ModelAttribute("zachetModel") @Valid ZachetModel zachetModel, BindingResult bindingResult, Model model){
+    public String newZachet(@RequestParam("group_id") Integer group_id, @RequestParam("subject_id") Integer subject_id,
+                            @ModelAttribute("zachetModel") @Valid ZachetModel zachetModel, BindingResult bindingResult, Model model,
+                            @RequestParam("searchSurname") String searchSurname, @RequestParam("labaNum") Integer labaNum){
         Group group = groupService.findById(group_id);
         Subject subject = subjectService.findById(subject_id);
 
@@ -82,12 +90,29 @@ public class TeacherController {
                     .addAttribute("students", group.getStudents())
                     .addAttribute("groups", groupService.getGroups())
                     .addAttribute("subjects", subjectService.getSubjects())
-                    .addAttribute("zachetService", zachetService);
+                    .addAttribute("zachetService", zachetService)
+                    .addAttribute("tableFilter", new TableFilter(searchSurname, labaNum));
             return "teachers/groupInfo";
         }
-
-
         zachetService.update(zachet, subject_id);
         return String.format("redirect:/teacher/group?group=%d&subject=%d", group_id, subject_id);
+    }
+
+    @PostMapping("/group/select")
+    public String selectUser(Model model, @ModelAttribute("tableFilter") TableFilter tableFilter,  @RequestParam("group_id") Integer group_id, @RequestParam("subject_id") Integer subject_id){
+        Group group = groupService.findById(group_id);
+        Subject subject = subjectService.findById(subject_id);
+        List<Student> students = group.selectStudentsByFilter(tableFilter, subject);
+        if (students == null)
+            students = group.getStudents();
+        model.addAttribute("group", group)
+                .addAttribute("groupANDsubject", new GroupAndSubject(group, subject))
+                .addAttribute("subject", subject)
+                .addAttribute("students", students)
+                .addAttribute("groups", groupService.getGroups())
+                .addAttribute("subjects", subjectService.getSubjects())
+                .addAttribute("zachetService", zachetService)
+                .addAttribute("zachetModel", new ZachetModel());
+        return "teachers/groupInfo";
     }
 }

@@ -3,6 +3,8 @@ package by.gurinovich.ZapolZachetSpring.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "subjects")
 public class Subject {
@@ -43,5 +45,18 @@ public class Subject {
 
     public void setQuantOfLabs(Integer quantOfLabs) {
         this.quantOfLabs = quantOfLabs;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Subject subject = (Subject) o;
+        return id == subject.id && Objects.equals(title, subject.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title);
     }
 }

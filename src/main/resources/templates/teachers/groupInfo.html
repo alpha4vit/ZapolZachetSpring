@@ -31,10 +31,25 @@
     <input type="submit" value="Выбрать!">
 </form>
 <br/>
+<hr/>
+<br/>
+<form th:method="post" th:object="${tableFilter}" th:action="@{/teacher/group/select}">
+    <input type="hidden" th:name="group_id" th:value="${groupANDsubject.group.getId()}"/>
+    <input type="hidden" th:name="subject_id" th:value="${groupANDsubject.subject.getId()}"/>
+    <label for="surname">Введите фамилию</label>
+    <input type="text" th:field="*{surnameSearch}" id="surname"/>
+    <label for="labaNum">Введите номер ЛР</label>
+    <input type="text" th:field="*{labaNum}" id="labaNum"/>
+    <input type="submit" th:value="Отфильтровать"/>
+</form>
+<br/>
+<hr/>
 <br/>
 <form th:object="${zachetModel}" th:action="@{/teacher/group/newZachet}" th:method="patch">
     <input type="hidden" th:name="group_id" th:value="${groupANDsubject.group.getId()}"/>
     <input type="hidden" th:name="subject_id" th:value="${groupANDsubject.subject.getId()}"/>
+    <input type="hidden" th:name="searchSurname" th:value="${tableFilter.getSurnameSearch()}"/>
+    <input type="hidden" th:name="labaNum" th:value="${tableFilter.getLabaNum()}"/>
     <select th:field="${zachetModel.student}">
         <option th:value="${student.id}" th:each="student : ${students}" th:text="${student.getFio()}"></option>
     </select>
