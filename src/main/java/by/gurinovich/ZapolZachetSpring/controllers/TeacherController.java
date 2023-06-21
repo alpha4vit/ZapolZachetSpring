@@ -80,22 +80,23 @@ public class TeacherController {
                             @RequestParam("searchSurname") String searchSurname, @RequestParam("labaNum") Integer labaNum){
         Group group = groupService.findById(group_id);
         Subject subject = subjectService.findById(subject_id);
-
         Zachet zachet = new Zachet(studentService.findById(zachetModel.getStudent().getId()), subject, zachetModel.getValue(), zachetModel.getNumber());
         zachetValidator.validate(zachet, bindingResult);
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("group", group)
-                    .addAttribute("groupANDsubject", new GroupAndSubject(group, subject))
-                    .addAttribute("subject", subject)
-                    .addAttribute("students", group.getStudents())
-                    .addAttribute("groups", groupService.getGroups())
-                    .addAttribute("subjects", subjectService.getSubjects())
-                    .addAttribute("zachetService", zachetService)
-                    .addAttribute("tableFilter", new TableFilter(searchSurname, labaNum));
-            return "teachers/groupInfo";
+        if (!bindingResult.hasErrors()) {
+            zachetService.update(zachet, subject_id);
         }
-        zachetService.update(zachet, subject_id);
-        return String.format("redirect:/teacher/group?group=%d&subject=%d", group_id, subject_id);
+        List<Student> students = group.selectStudentsByFilter(new TableFilter(searchSurname, labaNum), subject);
+        if (students == null)
+            students = group.getStudents();
+        model.addAttribute("group", group)
+                .addAttribute("groupANDsubject", new GroupAndSubject(group, subject))
+                .addAttribute("subject", subject)
+                .addAttribute("students", students)
+                .addAttribute("groups", groupService.getGroups())
+                .addAttribute("subjects", subjectService.getSubjects())
+                .addAttribute("zachetService", zachetService)
+                .addAttribute("tableFilter", new TableFilter(searchSurname, labaNum));
+        return "teachers/groupInfo";
     }
 
     @PostMapping("/group/select")
