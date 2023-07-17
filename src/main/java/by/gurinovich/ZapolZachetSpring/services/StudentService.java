@@ -44,7 +44,7 @@ public class StudentService {
     public void save(Student student, int group_id){
         student.setGroup(groupService.findById(group_id));
         studentRepository.save(student);
-
+        // TODO нужно сделать так, чтобы лабы создавались, только по предметам, которые есть у этой группы, а создается абсолютно для всех предметов, лишний расход памяти и времени
         List<Subject> subjects = subjectService.getSubjects();
         for (Subject subject : subjects){
             for (int i =1; i <= subject.getQuantOfLabs(); ++i){
