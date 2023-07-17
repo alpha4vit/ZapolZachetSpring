@@ -1,7 +1,8 @@
 package by.gurinovich.ZapolZachetSpring.controllers;
 
+import by.gurinovich.ZapolZachetSpring.DTO.GroupAndSubject;
+import by.gurinovich.ZapolZachetSpring.DTO.Request;
 import by.gurinovich.ZapolZachetSpring.models.Group;
-import by.gurinovich.ZapolZachetSpring.models.GroupAndSubject;
 import by.gurinovich.ZapolZachetSpring.models.Subject;
 import by.gurinovich.ZapolZachetSpring.models.auth.User;
 import by.gurinovich.ZapolZachetSpring.security.UserDetails;
@@ -12,7 +13,6 @@ import by.gurinovich.ZapolZachetSpring.services.auth.RegistrationService;
 import by.gurinovich.ZapolZachetSpring.utils.validotors.UserValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,35 +40,31 @@ public class UserController {
     }
 
     @GetMapping("/choosegroup")
-    public String chooseGroup(Model model, @ModelAttribute("groupANDsubject") GroupAndSubject groupAndSubject){
+    public String chooseGroup(Model model){
         UserDetails user = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails){
             user = (UserDetails) principal;
         }
-        model.addAttribute("groups", groupService.getGroups())
-                .addAttribute("subjects", subjectService.getSubjects())
-                .addAttribute("current_user", user);
+        model.addAttribute("current_user", user);
         return "users/choosePage";
     }
 
     @PostMapping("/choosegroup")
-    public String showToTable(@ModelAttribute("groupANDsubject") GroupAndSubject groupAndSubject, Model model) throws IOException {
+    public String showToTable(@RequestBody Request request, Model model) throws IOException {
         UserDetails user = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails){
             user = (UserDetails) principal;
         }
-        Group groupInfo = groupService.findById(groupAndSubject.getGroup().getId());
-        Subject subject = subjectService.findById(groupAndSubject.getSubject().getId());
-        model.addAttribute("groups", groupService.getGroups())
-                .addAttribute("subjects", subjectService.getSubjects())
-                .addAttribute("groupInfo", groupInfo)
-                .addAttribute("students", groupInfo.getStudents())
+        Group group = groupService.findById(request.getGroup_id());
+        Subject subject = subjectService.findById(request.getSubject_id());
+        model.addAttribute("students", group.getStudents())
                 .addAttribute("quantOfLabas", subject.getQuantOfLabs())
                 .addAttribute("zachetService", zachetService)
-                .addAttribute("current_user", user);
-        return "users/showGroupInfo";
+                .addAttribute("current_user", user)
+                .addAttribute("groupANDsubject", new GroupAndSubject(group, subject));
+        return "users/table";
     }
 
     @GetMapping("/registration")

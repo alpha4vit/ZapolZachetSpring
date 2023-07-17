@@ -17,8 +17,8 @@ public class ZachetValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         Zachet zachet = (Zachet) target;
-        int number = zachet.getSubject().getQuantOfLabs();
-        if (zachet.getNumber() > number)
+        int number = zachet.getLaba().getSubject().getQuantOfLabs();
+        if (zachet.getLaba().getNumber() > number)
             errors.rejectValue("number", "", "Лабораторной работы с данным номером не существует");
     }
 }

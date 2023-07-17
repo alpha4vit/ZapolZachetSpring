@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 
+import java.util.List;
+
 @Entity
 @Table(name = "zachety")
 public class Zachet {
@@ -16,33 +18,23 @@ public class Zachet {
     @JoinColumn(name = "student_id", referencedColumnName = "id")
     private Student student;
 
-    @OneToOne
-    @JoinColumn(name = "subject_id", referencedColumnName = "id")
-    private Subject subject;
-
     @Column(name = "value")
     @Pattern(regexp = "[+-]", message = "Значение должно быть в формате \"+\" / \"-\"")
     private String value;
 
-    @Column(name = "number")
-    @Min(value = 1, message = "Номер лабораторной должен быть больше 0")
-    private int number;
+    @ManyToOne
+    @JoinColumn(name = "laba_id", referencedColumnName = "id")
+    private Laba laba;
 
     public Zachet() {
     }
 
-    public Zachet(Student student, Subject subject, String value, int number) {
+    public Zachet(Student student, String value, Laba laba) {
         this.student = student;
-        this.subject = subject;
         this.value = value;
-        this.number = number;
+        this.laba = laba;
     }
 
-
-
-    public Zachet(Subject subject) {
-        this.subject = subject;
-    }
 
     public int getId() {
         return id;
@@ -60,13 +52,6 @@ public class Zachet {
         this.student = student;
     }
 
-    public Subject getSubject() {
-        return subject;
-    }
-
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
 
     public String getValue() {
         return value;
@@ -76,11 +61,11 @@ public class Zachet {
         this.value = value;
     }
 
-    public int getNumber() {
-        return number;
+    public Laba getLaba() {
+        return laba;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setLaba(Laba laba) {
+        this.laba = laba;
     }
 }

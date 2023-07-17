@@ -1,5 +1,6 @@
 package by.gurinovich.ZapolZachetSpring.repositories;
 
+import by.gurinovich.ZapolZachetSpring.models.Laba;
 import by.gurinovich.ZapolZachetSpring.models.Student;
 import by.gurinovich.ZapolZachetSpring.models.Subject;
 import by.gurinovich.ZapolZachetSpring.models.Zachet;
@@ -11,6 +12,6 @@ import java.util.Optional;
 
 @Repository
 public interface ZachetRepository extends JpaRepository<Zachet, Integer> {
-    List<Zachet> findByStudentAndSubject(Student student, Subject subject);
-    Optional<Zachet> findByStudentAndSubjectAndNumber(Student student, Subject subject, int number);
+    List<Zachet> findByStudent(Student student);
+    Optional<Zachet> findByStudentAndLaba(Student student, Laba laba);
 }

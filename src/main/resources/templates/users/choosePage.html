@@ -5,8 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title></title>
     <link type="text/css" rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.3"></script>
 </head>
-<body>
+<body onload="updateSubjectSelect()">
 <header>
     <nav>
         <ul>
@@ -26,14 +28,16 @@
         <a class="a_header" href="/login">Войти</a>
     </div>
 </header>
-<form th:object="${groupANDsubject}" th:method="post" th:action="@{/choosegroup}">
-  <select th:field="${groupANDsubject.group}">
-      <option th:value="${group.id}" th:each="group : ${groups}" th:text="${group.getName()}"></option>
-  </select>
-   <select th:field="${groupANDsubject.subject}" >
-       <option th:value="${subject.id}" th:each="subject: ${subjects}" th:text="${subject.getTitle()}"></option>
-   </select>
-    <input type="submit" value="Выбрать!"/>
+<form class="form-select" >
+    <select name=groupSelect" id=groupSelect" class="group-select" onclick="updateSubjectSelect()">
+        <option v-for="group in groups":value="group.id">{{group.name}}</option>
+    </select>
+    <select name="subjectSelect" id="subjectSelect" class="subject-select">
+
+    </select>
+    <input onclick="selection('user')" type="button" value="Выбрать!"/>
 </form>
+<div id="table" class="data" align = "center" style=" margin-left:2%; margin-right:2%;"></div>
+<script src="/js/choosegroup.js"></script>
 </body>
 </html>

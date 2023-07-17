@@ -24,6 +24,15 @@ public class Group {
     @OneToMany(mappedBy = "group")
     private List<Student> students;
 
+
+    @ManyToMany
+    @JoinTable(
+            name = "group_subject",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id")
+    )
+    private List<Subject> subjects;
+
     public Group() {
     }
 
@@ -51,30 +60,38 @@ public class Group {
         this.students = students;
     }
 
-    public List<Student> selectStudentsByFilter(TableFilter filter, Subject subject){
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
+    }
+
+    public List<Student> selectStudentsByFilter(String surnameSearch, Integer labaNum, Subject subject){
         List<Student> selection = new ArrayList<>();
-        if (filter.getLabaNum() != null  && filter.getSurnameSearch() != null && !filter.getSurnameSearch().equals("")){
+        if (labaNum != null  && surnameSearch != null && !surnameSearch.equals("")){
             for (Student st : this.students){
                 List<Zachet> zachets = st.getZachety();
                 for (int i =0; i < zachets.size(); ++i) {
-                    if (zachets.get(i).getStudent().getFio().startsWith(filter.getSurnameSearch()) && zachets.get(i).getValue().equalsIgnoreCase("-") && filter.getLabaNum() == zachets.get(i).getNumber() && zachets.get(i).getSubject().equals(subject)) {
+                    if (zachets.get(i).getStudent().getFio().startsWith(surnameSearch) && zachets.get(i).getValue().equalsIgnoreCase("-") && labaNum == zachets.get(i).getLaba().getNumber() && zachets.get(i).getLaba().getSubject().equals(subject)) {
                         selection.add(st);
                         break;
                     }
                 }
             }
         }
-        else if (filter.getSurnameSearch() != null && !filter.getSurnameSearch().equals("")) {
+        else if (surnameSearch != null && !surnameSearch.equals("")) {
             for (Student st : this.students) {
-                if (st.getFio().startsWith(filter.getSurnameSearch()))
+                if (st.getFio().startsWith(surnameSearch))
                     selection.add(st);
             }
         }
-        else if (filter.getLabaNum() != null){
+        else if (labaNum != null){
             for (Student st : this.students){
                 List<Zachet> zachets = st.getZachety();
                 for (int i =0; i < zachets.size(); ++i) {
-                    if (zachets.get(i).getValue().equalsIgnoreCase("-") && filter.getLabaNum() == zachets.get(i).getNumber() && zachets.get(i).getSubject().equals(subject)) {
+                    if (zachets.get(i).getValue().equalsIgnoreCase("-") && labaNum == zachets.get(i).getLaba().getNumber() && zachets.get(i).getLaba().getSubject().equals(subject)) {
                         selection.add(st);
                         break;
                     }
@@ -85,6 +102,5 @@ public class Group {
             return null;
         return selection;
     }
-
 
 }

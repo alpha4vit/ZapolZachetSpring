@@ -1,4 +1,7 @@
-package by.gurinovich.ZapolZachetSpring.models;
+package by.gurinovich.ZapolZachetSpring.DTO;
+
+import by.gurinovich.ZapolZachetSpring.models.Group;
+import by.gurinovich.ZapolZachetSpring.models.Subject;
 
 public class GroupAndSubject {
     private Group group;

@@ -61,7 +61,7 @@ select, input[type="text"] {
 }
 
 button,
-input[type="submit"] {
+input[type="submit"],[type="button"] {
     display: block;
     margin-top: 10px;
     padding: 10px 20px;
@@ -76,7 +76,7 @@ input[type="submit"] {
 
 /* При наведении курсора на кнопку */
 button:hover,
-input[type="submit"]:hover {
+input[type="submit"],[type="button"]:hover {
     background-color: #449d44;
     transform: scale(1.05); /* Увеличение размера на 10% */
     opacity: 0.8; /* Увеличение прозрачности на 0.8 */
@@ -84,7 +84,7 @@ input[type="submit"]:hover {
 
 /* При нажатии на кнопку */
 button:active,
-input[type="submit"]:active {
+input[type="submit"],[type="button"]:active {
     background-color: #398439;
 }
 

@@ -1,15 +1,16 @@
 package by.gurinovich.ZapolZachetSpring.services;
 
+import by.gurinovich.ZapolZachetSpring.models.Laba;
 import by.gurinovich.ZapolZachetSpring.models.Student;
 import by.gurinovich.ZapolZachetSpring.models.Subject;
 import by.gurinovich.ZapolZachetSpring.models.Zachet;
+import by.gurinovich.ZapolZachetSpring.repositories.LabaRepository;
 import by.gurinovich.ZapolZachetSpring.repositories.StudentRepository;
 import by.gurinovich.ZapolZachetSpring.repositories.ZachetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,13 +20,15 @@ public class StudentService {
     private final GroupService groupService;
     private final SubjectService subjectService;
     private final ZachetRepository zachetRepository;
+    private final LabaService labaService;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository, GroupService groupService, SubjectService subjectService, ZachetRepository zachetRepository) {
+    public StudentService(StudentRepository studentRepository, GroupService groupService, SubjectService subjectService, ZachetRepository zachetRepository, LabaService labaService) {
         this.studentRepository = studentRepository;
         this.groupService = groupService;
         this.subjectService = subjectService;
         this.zachetRepository = zachetRepository;
+        this.labaService = labaService;
     }
 
     @Transactional
@@ -45,7 +48,7 @@ public class StudentService {
         List<Subject> subjects = subjectService.getSubjects();
         for (Subject subject : subjects){
             for (int i =1; i <= subject.getQuantOfLabs(); ++i){
-                zachetRepository.save(new Zachet(studentRepository.findByFio(student.getFio()), subject, "-", i));
+                zachetRepository.save(new Zachet(studentRepository.findByFio(student.getFio()), "-", labaService.save(i, "temp", subject)));
             }
         }
     }

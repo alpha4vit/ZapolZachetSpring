@@ -1,0 +1,20 @@
+
+
+  <p><table class="dataframe">
+
+  <thead>
+  <tr style="text-align: right;">
+    <th th:text="${groupANDsubject.getGroup().getName()+', '+groupANDsubject.getSubject().getTitle()}" style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto"></th>
+    <th th:each="num : ${#numbers.sequence(1, quantOfLabas)}" th:text="${num}" style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">1</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="student : ${students}">
+    <th th:text="${student.getFio()}" style = "background-color: #E2EFDA;font-family: Century Gothic, sans-serif;font-size: medium;text-align: left;padding: 0px 20px 0px 0px;width: auto"></th>
+    <td th:each="zachet : ${zachetService.findByStudentAndSubject(student, groupANDsubject.getSubject())}" th:text="${zachet.getValue()}" style = "background-color: #E2EFDA;font-family: Century Gothic, sans-serif;font-size: medium;text-align: left;padding: 0px 20px 0px 0px;width: auto"></td>
+  </tr>
+
+  </tbody>
+</table>
+  </p>
+

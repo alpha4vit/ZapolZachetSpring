@@ -3,6 +3,7 @@ package by.gurinovich.ZapolZachetSpring.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -20,6 +21,14 @@ public class Subject {
     @Column(name = "quantoflabs")
     @NotNull
     private Integer quantOfLabs;
+
+    @ManyToMany
+    @JoinTable(
+            name = "group_subject",
+            joinColumns = @JoinColumn(name = "subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id")
+    )
+    private List<Group> groups;
 
     public Subject() {}
 

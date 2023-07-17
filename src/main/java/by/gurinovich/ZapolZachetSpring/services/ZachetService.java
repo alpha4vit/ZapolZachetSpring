@@ -1,5 +1,6 @@
 package by.gurinovich.ZapolZachetSpring.services;
 
+import by.gurinovich.ZapolZachetSpring.models.Laba;
 import by.gurinovich.ZapolZachetSpring.models.Student;
 import by.gurinovich.ZapolZachetSpring.models.Subject;
 import by.gurinovich.ZapolZachetSpring.models.Zachet;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,13 +17,13 @@ import java.util.Optional;
 public class ZachetService {
     private final ZachetRepository zachetRepository;
     private final StudentService studentService;
-    private final SubjectService subjectService;
+    private final LabaService labaService;
 
     @Autowired
-    public ZachetService(ZachetRepository zachetRepository, StudentService studentService, SubjectService subjectService) {
+    public ZachetService(ZachetRepository zachetRepository, StudentService studentService, LabaService labaService) {
         this.zachetRepository = zachetRepository;
         this.studentService = studentService;
-        this.subjectService = subjectService;
+        this.labaService = labaService;
     }
 
     @Transactional
@@ -30,12 +32,20 @@ public class ZachetService {
     }
 
     public List<Zachet> findByStudentAndSubject(Student student, Subject subject){
-        return zachetRepository.findByStudentAndSubject(student, subject).stream().sorted((z1, z2) -> Integer.compare(z1.getNumber(), z2.getNumber())).toList();
+        List<Zachet> result = new ArrayList<>();
+        List<Zachet> temp = zachetRepository.findByStudent(student);
+        for (Zachet zachet : temp){
+            if (zachet.getLaba().getSubject().equals(subject)) {
+                result.add(zachet);
+            }
+        }
+        return result.stream().sorted((z1, z2) -> Integer.compare(z1.getLaba().getNumber(), z2.getLaba().getNumber())).toList();
     }
 
     @Transactional
-    public void update(Zachet zachet, int subject_id){
-        Optional<Zachet> temp = zachetRepository.findByStudentAndSubjectAndNumber(studentService.findById(zachet.getStudent().getId()), subjectService.findById(subject_id), zachet.getNumber());
+    public void update(Zachet zachet){
+        Optional<Zachet> temp = zachetRepository.findByStudentAndLaba(studentService.findById(zachet.getStudent().getId()),
+                labaService.findById(zachet.getLaba().getId()));
         if (temp.isPresent()){
             zachet.setId(temp.get().getId());
             zachetRepository.save(zachet);
