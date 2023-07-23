@@ -2,7 +2,6 @@ package by.gurinovich.ZapolZachetSpring.utils.validotors;
 
 import by.gurinovich.ZapolZachetSpring.models.Group;
 import by.gurinovich.ZapolZachetSpring.services.GroupService;
-import jakarta.persistence.Column;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

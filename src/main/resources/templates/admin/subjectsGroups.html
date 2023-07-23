@@ -1,0 +1,27 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title></title>
+  <link type="text/css" rel="stylesheet" th:href="@{/css/style.css}">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.3"></script>
+</head>
+<body>
+
+<form th:method="post" th:action="@{/admin/subjects/{subject_id}/addGroup(subject_id=${subject.getId()})}">
+  <select class="newgroup-selector" >
+    <option th:each="avail : ${availableGroups}" th:value="${avail.getId()}" th:text="${avail.getName()}"></option>
+  </select>
+  <input type="button" onclick="addNewGroupForSubject()" value="Добавить">
+</form>
+
+<div th:each="group : ${groups}">
+  <p th:text="${group.getName()}"></p>
+  <form>
+    <input id="group_id" type="hidden" th:value="${group.getId()}"/>
+    <input type="button" value="Удалить!" onclick="deleteGroupFromSubject()"/>
+  </form>
+</div>
+

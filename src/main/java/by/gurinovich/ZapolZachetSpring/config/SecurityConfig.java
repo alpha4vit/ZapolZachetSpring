@@ -38,8 +38,8 @@ public class SecurityConfig {
     public SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/teacher/**").hasAnyRole("TEACHER", "ADMIN")
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                //.requestMatchers("/teacher/**").hasAnyRole("TEACHER", "ADMIN")
+               // .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
@@ -54,7 +54,7 @@ public class SecurityConfig {
                         else if (role.equals("ROLE_TEACHER"))
                             response.sendRedirect("/teacher");
                         else if (role.equals("ROLE_ADMIN"))
-                            response.sendRedirect("/admin");
+                            response.sendRedirect("/admin/users");
                     }
                 })
                 .failureUrl("/auth/login?error")

@@ -30,7 +30,18 @@ public class Subject {
     )
     private List<Group> groups;
 
+    @OneToMany(mappedBy = "subject")
+    private List<Laba> labas;
+
     public Subject() {}
+
+    public Subject(int id, String title, Integer quantOfLabs, List<Group> groups, List<Laba> labas) {
+        this.id = id;
+        this.title = title;
+        this.quantOfLabs = quantOfLabs;
+        this.groups = groups;
+        this.labas = labas;
+    }
 
     public int getId() {
         return id;
@@ -54,6 +65,22 @@ public class Subject {
 
     public void setQuantOfLabs(Integer quantOfLabs) {
         this.quantOfLabs = quantOfLabs;
+    }
+
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
+    }
+
+    public List<Laba> getLabas() {
+        return labas;
+    }
+
+    public void setLabas(List<Laba> labas) {
+        this.labas = labas;
     }
 
     @Override

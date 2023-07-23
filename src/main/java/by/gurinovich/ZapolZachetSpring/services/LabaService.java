@@ -25,10 +25,11 @@ public class LabaService {
         return labaRepository.findByNumberAndSubject(number, subject).orElse(null);
     }
 
-    public Laba save(Integer number, String value, Subject subject){
+    public Laba save(Integer number, String title, Subject subject){
         Optional<Laba> temp = labaRepository.findByNumberAndSubject(number, subject);
-        return temp.orElseGet(() -> labaRepository.save(new Laba(number, value, subject)));
+        return temp.orElseGet(() -> labaRepository.save(new Laba(number, title, subject)));
     }
+
 
 
 }

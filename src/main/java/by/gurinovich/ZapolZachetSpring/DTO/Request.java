@@ -14,7 +14,15 @@ public class Request {
     private Integer labaNumZachet;
     private String value;
 
-    public Request(Integer group_id, Integer subject_id, String surnameSearch, Integer labaNumFilter, Integer student_id, Integer labaNumZachet, String value) {
+    private Integer newQuantOfLabas;
+    private Integer newLabaNum;
+    private String newLabaTitle;
+
+
+    private String type;
+
+    public Request(Integer group_id, Integer subject_id, String surnameSearch, Integer labaNumFilter, Integer student_id,
+                   Integer labaNumZachet, String value, Integer newQuantOfLabas, Integer newLabaNum, String newLabaTitle, String type) {
         this.group_id = group_id;
         this.subject_id = subject_id;
         this.surnameSearch = surnameSearch;
@@ -22,6 +30,10 @@ public class Request {
         this.student_id = student_id;
         this.labaNumZachet = labaNumZachet;
         this.value = value;
+        this.newQuantOfLabas = newQuantOfLabas;
+        this.newLabaNum = newLabaNum;
+        this.newLabaTitle = newLabaTitle;
+        this.type = type;
     }
 
     public Request() {
@@ -81,5 +93,37 @@ public class Request {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public Integer getNewQuantOfLabas() {
+        return newQuantOfLabas;
+    }
+
+    public void setNewQuantOfLabas(Integer newQuantOfLabas) {
+        this.newQuantOfLabas = newQuantOfLabas;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Integer getNewLabaNum() {
+        return newLabaNum;
+    }
+
+    public void setNewLabaNum(Integer newLabaNum) {
+        this.newLabaNum = newLabaNum;
+    }
+
+    public String getNewLabaTitle() {
+        return newLabaTitle;
+    }
+
+    public void setNewLabaTitle(String newLabaTitle) {
+        this.newLabaTitle = newLabaTitle;
     }
 }

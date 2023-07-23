@@ -50,6 +50,6 @@ public class GroupService {
     }
 
     public Group findByName(String name){
-        return groupRepository.findByName(name);
+        return groupRepository.findByName(name).orElse(null);
     }
 }

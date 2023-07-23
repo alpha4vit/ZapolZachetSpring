@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link type="text/css" rel="stylesheet" th:href="@{/css/style.css}">
+
+  <title>Group Info</title>
+</head>
+<body>
+<header class="site-header">
+  <nav>
+    <ul>
+      <li><button class="dropdown-btn"> <a href="/admin/users">Пользователи</a></button></li>
+      <li><div class="dropdown">
+        <button class="dropdown-btn">Обучение</button>
+        <div class="dropdown-content">
+          <a href="/admin/groups" class="dropdown-item">Группы</a>
+          <a href="/admin/subjects" class="dropdown-item">Предметы</a>
+        </div>
+      </div></li>
+
+    </ul>
+  </nav>
+  <button class="dropdown-btn"><a href="/logout">Выйти</a></button>
+</header>
+<form th:method="post" th:object="${newSubject}" th:action = "@{/admin/subjects/createNewSubject}">
+  <label for="title">Введите название предмета: </label>
+  <input type="text" th:field="*{title}" id="title"/>
+  <br/>
+    <label for="quantOfLabas">Введите количество ЛР:</label>
+    <input type="text" th:field="*{quantOfLabs}" id="quantOfLabas"/>
+  <input type="submit" value="Добавить!"/>
+  <div style="color: darkred" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+</form>
+<div th:each="subject : ${subjects}">
+    <span>
+        <a th:href="@{/admin/subjects/{id}(id=${subject.getId()})}" th:text="${subject.getTitle()}"></a>
+        </span>
+  <span>
+        <form th:method = "patch" th:action="@{/admin/subjects/deleteSubject/{id}(id = ${subject.getId()})}">
+            <button>Удалить!</button>
+        </form>
+    </span>
+</div>
+</body>
+</html>

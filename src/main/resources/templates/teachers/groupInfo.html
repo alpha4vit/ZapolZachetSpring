@@ -33,7 +33,7 @@
     <thead>
     <tr style="text-align: right;">
         <th th:text="${groupANDsubject.getGroup().getName()+', '+groupANDsubject.getSubject().getTitle()}" style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto"></th>
-        <th th:each="num : ${#numbers.sequence(1, groupANDsubject.getSubject().getQuantOfLabs())}" th:text="${num}" style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">1</th>
+        <th th:each="laba : ${groupANDsubject.getSubject().getLabas()}" th:text="${laba.getNumber()}" style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">1</th>
     </tr>
     </thead>
     <tbody>

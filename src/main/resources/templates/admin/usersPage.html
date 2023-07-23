@@ -9,16 +9,21 @@
     <title>Group Info</title>
 </head>
 <body>
-<header>
+<header class="site-header">
     <nav>
         <ul>
-            <li><a class="a_header" href="/admin/users">Пользователи</a></li>
-            <li><a class="a_header" href="/admin">Группы</a></li>
+            <li><button class="dropdown-btn"> <a href="/admin/users">Пользователи</a></button></li>
+            <li><div class="dropdown">
+                <button class="dropdown-btn">Обучение</button>
+                <div class="dropdown-content">
+                    <a href="/admin/groups" class="dropdown-item">Группы</a>
+                    <a href="/admin/subjects" class="dropdown-item">Предметы</a>
+                </div>
+            </div></li>
+
         </ul>
     </nav>
-    <div class="right-content">
-        <a class="a_header" href="/logout">Выйти</a>
-    </div>
+    <button class="dropdown-btn"><a href="/logout">Выйти</a></button>
 </header>
 <form method="post" th:action="@{/admin/users}">
     <label for="search">Введите поисковый запрос </label>

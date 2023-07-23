@@ -1,11 +1,9 @@
 package by.gurinovich.ZapolZachetSpring.services;
 
-import by.gurinovich.ZapolZachetSpring.models.Laba;
-import by.gurinovich.ZapolZachetSpring.models.Student;
-import by.gurinovich.ZapolZachetSpring.models.Subject;
-import by.gurinovich.ZapolZachetSpring.models.Zachet;
+import by.gurinovich.ZapolZachetSpring.models.*;
 import by.gurinovich.ZapolZachetSpring.repositories.ZachetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,4 +50,6 @@ public class ZachetService {
         }
         zachetRepository.save(zachet);
     }
+
+
 }
