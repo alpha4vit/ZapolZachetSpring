@@ -31,9 +31,16 @@ public class StudentService {
         this.labaService = labaService;
     }
 
+    public List<Student> getAllStudents(){
+        return studentRepository.findAll();
+    }
+
     @Transactional
     public void deleteStudentById(int id){
+        Student student = studentRepository.findById(id).orElse(null);
+        zachetRepository.deleteAll(student.getZachety());
         studentRepository.deleteById(id);
+
     }
 
     public Student findById(int id){
@@ -44,13 +51,7 @@ public class StudentService {
     public void save(Student student, int group_id){
         student.setGroup(groupService.findById(group_id));
         studentRepository.save(student);
-        // TODO нужно сделать так, чтобы лабы создавались, только по предметам, которые есть у этой группы, а создается абсолютно для всех предметов, лишний расход памяти и времени
-        List<Subject> subjects = subjectService.getSubjects();
-        for (Subject subject : subjects){
-            for (int i =1; i <= subject.getQuantOfLabs(); ++i){
-                zachetRepository.save(new Zachet(studentRepository.findByFio(student.getFio()), "-", labaService.save(i, "temp", subject)));
-            }
-        }
+        updateZachetsForNewStudent(group_id, student);
     }
 
 
@@ -65,4 +66,14 @@ public class StudentService {
         return studentRepository.findByFio(fio);
     }
 
+
+    @Transactional
+    public void updateZachetsForNewStudent(Integer group_id, Student student){
+        List<Subject> subjects = groupService.findById(group_id).getSubjects();
+        for (Subject subject : subjects){
+            for (Laba laba : subject.getLabas()){
+                zachetRepository.save(new Zachet(student, "-", laba));
+            }
+        }
+    }
 }

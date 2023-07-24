@@ -71,14 +71,15 @@ public class TeacherController {
         Group group = groupService.findById(request.getGroup_id());
         Subject subject = subjectService.findById(request.getSubject_id());
         zachetService.update(new Zachet(studentService.findById(request.getStudent_id()),
-                 request.getValue(), labaService.findByNumberAndSubject(request.getLabaNumZachet(), subject)));
+                 request.getValue(), labaService.findById(request.getNewLabaId())));
         List<Student> students = group.selectStudentsByFilter(request.getSurnameSearch(), request.getLabaNumFilter(), subject);
         if (students == null)
             students = group.getStudents();
         model.addAttribute("groupANDsubject", new GroupAndSubject(group, subject))
                 .addAttribute("students", students)
                 .addAttribute("zachetService", zachetService)
-                .addAttribute("request", request);
+                .addAttribute("request", request)
+                .addAttribute("zachetModel", new ZachetModel());
         return "teachers/groupInfo";
     }
 

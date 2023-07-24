@@ -1,6 +1,7 @@
 package by.gurinovich.ZapolZachetSpring.services;
 
 import by.gurinovich.ZapolZachetSpring.models.*;
+import by.gurinovich.ZapolZachetSpring.repositories.LabaRepository;
 import by.gurinovich.ZapolZachetSpring.repositories.SubjectRepository;
 import by.gurinovich.ZapolZachetSpring.repositories.ZachetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +18,13 @@ import static by.gurinovich.ZapolZachetSpring.utils.validotors.LabaValidator.val
 public class SubjectService {
     private final SubjectRepository subjectRepository;
     private final GroupService groupService;
-    private final LabaService labaService;
+    private final LabaRepository labaRepository;
     private final ZachetRepository zachetRepository;
-
     @Autowired
-    public SubjectService(SubjectRepository subjectRepository, GroupService groupService, LabaService labaService, ZachetRepository zachetRepository) {
+    public SubjectService(SubjectRepository subjectRepository, GroupService groupService, LabaRepository labaRepository, ZachetRepository zachetRepository) {
         this.subjectRepository = subjectRepository;
         this.groupService = groupService;
-        this.labaService = labaService;
+        this.labaRepository = labaRepository;
         this.zachetRepository = zachetRepository;
     }
 
@@ -72,6 +72,7 @@ public class SubjectService {
         groups.add(group);
         subject.setGroups(groups);
         subjectRepository.save(subject);
+        createZachetsForNewGroup(subject, group);
     }
 
     @Transactional
@@ -84,6 +85,7 @@ public class SubjectService {
         groups.remove(group);
         subject.setGroups(groups);
         subjectRepository.save(subject);
+        deleteZachetsWhenDeletingGroup(group, subject);
         return true;
     }
 
@@ -98,18 +100,38 @@ public class SubjectService {
         Laba laba = new Laba(labaNum, title, subject);
         if (!validateLaba(laba))
             return false;
-        labaService.save(labaNum, title, subject);
-        Laba created = labaService.findByNumberAndSubject(labaNum, subject);
+        labaRepository.save(new Laba(labaNum, title, subject));
+        Laba created = labaRepository.findByNumberAndSubject(labaNum, subject).orElse(null);
         updateZachetsForLaba(created.getId());
         return true;
     }
 
     @Transactional
     public void updateZachetsForLaba(Integer laba_id){
-        Laba laba = labaService.findById(laba_id);
+        Laba laba = labaRepository.findById(laba_id).orElse(null);
         for (Group group : laba.getSubject().getGroups()){
             for (Student student : group.getStudents()){
                 zachetRepository.save(new Zachet(student, "-", laba));
+            }
+        }
+    }
+
+    @Transactional
+    public void createZachetsForNewGroup(Subject subject, Group group){
+        for (Student student : group.getStudents()){
+            for (Laba laba : subject.getLabas()){
+                zachetRepository.save(new Zachet(student, "-", laba));
+            }
+        }
+    }
+
+    @Transactional
+    public void deleteZachetsWhenDeletingGroup(Group group, Subject subject){
+        for (Student student:group.getStudents()) {
+            for (Zachet zachet : zachetRepository.findByStudent(student)) {
+                if (zachet.getLaba().getSubject().equals(subject)) {
+                    zachetRepository.delete(zachet);
+                }
             }
         }
     }

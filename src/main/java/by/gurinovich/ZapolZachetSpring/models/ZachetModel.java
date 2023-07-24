@@ -1,8 +1,6 @@
 package by.gurinovich.ZapolZachetSpring.models;
 
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 
 public class ZachetModel {
@@ -14,10 +12,14 @@ public class ZachetModel {
     @Pattern(regexp = "[+-]", message = "Значение должно быть в формате \"+\" / \"-\"")
     private String value;
 
-    @Min(value = 1, message = "Номер лабораторной должен быть больше 0")
-    private int number;
+    private Integer laba_id;
 
     public ZachetModel() {
+    }
+
+    public ZachetModel(Student student, Integer laba_id) {
+        this.student = student;
+        this.laba_id = laba_id;
     }
 
     public String getValue() {
@@ -28,12 +30,12 @@ public class ZachetModel {
         this.value = value;
     }
 
-    public int getNumber() {
-        return number;
+    public int getLaba_id() {
+        return laba_id;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setLaba_id(int laba_id) {
+        this.laba_id = laba_id;
     }
 
     public Student getStudent() {

@@ -5,7 +5,6 @@
     <label for="surnameFilter">Введите фамилию</label>
     <input th:value="${request.getSurnameSearch()}" type="text" id="surnameFilter"/>
     <br/>
-    <label for="labaNumFilter">Введите номер ЛР</label>
     <input th:value="${request.getLabaNumFilter()}" type="text" id="labaNumFilter"/>
     <input onclick="selection('teacher-filter')" type="button" th:value="Отфильтровать"/>
 </form>
@@ -17,8 +16,9 @@
         <option th:value="${student.id}" th:each="student : ${students}" th:text="${student.getFio()}"></option>
     </select>
     <br/>
-    <label for="labaNumZachet">Введите номер ЛР: </label>
-    <input id="labaNumZachet" type="text"/>
+    <select id="labaIdZachet" >
+        <option th:each="laba : ${groupANDsubject.getSubject().getLabas()}" th:value="${laba.getId()}" th:text="${laba.getNumber()+') '+laba.getTitle()}"></option>
+    </select>
     <br/>
     <label for="valueZachet">Введите оценку (+ / -)</label>
     <input id="valueZachet" type="text"/>
@@ -33,7 +33,7 @@
     <thead>
     <tr style="text-align: right;">
         <th th:text="${groupANDsubject.getGroup().getName()+', '+groupANDsubject.getSubject().getTitle()}" style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto"></th>
-        <th th:each="laba : ${groupANDsubject.getSubject().getLabas()}" th:text="${laba.getNumber()}" style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">1</th>
+        <th th:each="laba : ${groupANDsubject.getSubject().getLabas()}" th:title="${laba.getTitle()}" th:text="${laba.getNumber()}" style = "background-color: #FFFFFF;font-family: Century Gothic, sans-serif;font-size: medium;color: #548235;text-align: left;border-bottom: 2px solid #548235;padding: 0px 20px 0px 0px;width: auto">1</th>
     </tr>
     </thead>
     <tbody>

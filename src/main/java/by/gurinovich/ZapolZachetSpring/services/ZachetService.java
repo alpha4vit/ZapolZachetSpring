@@ -51,5 +51,9 @@ public class ZachetService {
         zachetRepository.save(zachet);
     }
 
+    @Transactional
+    public void delete(Zachet zachet){
+        zachetRepository.delete(zachet);
+    }
 
 }

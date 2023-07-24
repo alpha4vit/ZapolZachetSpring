@@ -2,7 +2,6 @@ package by.gurinovich.ZapolZachetSpring.controllers;
 
 import by.gurinovich.ZapolZachetSpring.DTO.Request;
 import by.gurinovich.ZapolZachetSpring.models.Group;
-import by.gurinovich.ZapolZachetSpring.models.Laba;
 import by.gurinovich.ZapolZachetSpring.models.Student;
 import by.gurinovich.ZapolZachetSpring.models.Subject;
 import by.gurinovich.ZapolZachetSpring.models.auth.User;
@@ -22,8 +21,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -89,15 +86,15 @@ public class AdminController {
         return "admin/groupInfo";
     }
 
-    @PostMapping("/groups/{id}/addStudent")
-    public String addStudent(@PathVariable("id") int id, @ModelAttribute("newStudent") @Valid Student student, BindingResult bindingResult, Model model){
+    @PostMapping("/groups/{group_id}/addStudent")
+    public String addStudent(@PathVariable("group_id") int group_id, @ModelAttribute("newStudent") @Valid Student student, BindingResult bindingResult, Model model){
         studentValidator.validate(student, bindingResult);
         if (bindingResult.hasErrors()){
-            model.addAttribute("group", groupService.findById(id));
+            model.addAttribute("group", groupService.findById(group_id));
             return "admin/groupInfo";
         }
-        studentService.save(student, id);
-        return String.format("redirect:/admin/groups/%d", id);
+        studentService.save(student, group_id);
+        return String.format("redirect:/admin/groups/%d", group_id);
 
     }
 
@@ -256,7 +253,7 @@ public class AdminController {
     @ResponseBody
     @PostMapping("/subjects/{subject_id}/createLaba")
     public ResponseEntity<Object> createNewLaba(@PathVariable("subject_id") Integer subject_id, @RequestBody Request request){
-        if (subjectService.createNewLabaForSubject(subject_id, request.getNewLabaNum(), request.getNewLabaTitle())){
+        if (subjectService.createNewLabaForSubject(subject_id, request.getNewLabaId(), request.getNewLabaTitle())){
             Integer newQuantOfLabas = subjectService.findById(subject_id).getQuantOfLabs();
             return new ResponseEntity<>(newQuantOfLabas, HttpStatusCode.valueOf(200));
         }

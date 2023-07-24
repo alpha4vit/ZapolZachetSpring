@@ -51,7 +51,7 @@ function addNewZachet(){
     var group_id = document.querySelector(".group-select").value;
     var subject_id = document.querySelector(".subject-select").value;
     var student_id = document.querySelector("#student_idZachet").value;
-    var labaNum = document.querySelector("#labaNumZachet").value;
+    var laba_id = document.querySelector("#labaIdZachet").value;
     var value = document.querySelector("#valueZachet").value;
     var surnameSearch = document.querySelector("#surnameFilter").value;
     var labaNumFilter = document.querySelector("#labaNumFilter").value;
@@ -60,7 +60,7 @@ function addNewZachet(){
         group_id:group_id,
         subject_id:subject_id,
         student_id:student_id,
-        labaNumZachet:labaNum,
+        newLabaId:laba_id,
         value:value,
         surnameSearch:surnameSearch,
         labaNumFilter:labaNumFilter
