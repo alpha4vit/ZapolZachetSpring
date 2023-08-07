@@ -76,6 +76,7 @@ public class Subject {
     }
 
     public List<Laba> getLabas() {
+        labas.sort((o1, o2) -> {return Integer.compare(o1.getNumber(), o2.getNumber());});
         return labas;
     }
 

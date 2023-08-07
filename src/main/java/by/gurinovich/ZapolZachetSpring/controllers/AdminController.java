@@ -7,6 +7,7 @@ import by.gurinovich.ZapolZachetSpring.models.Subject;
 import by.gurinovich.ZapolZachetSpring.models.auth.User;
 import by.gurinovich.ZapolZachetSpring.security.UserDetails;
 import by.gurinovich.ZapolZachetSpring.services.GroupService;
+import by.gurinovich.ZapolZachetSpring.services.LabaService;
 import by.gurinovich.ZapolZachetSpring.services.StudentService;
 import by.gurinovich.ZapolZachetSpring.services.SubjectService;
 import by.gurinovich.ZapolZachetSpring.services.auth.UserDetailsService;
@@ -31,16 +32,18 @@ public class AdminController {
     private final StudentValidator studentValidator;
     private final UserDetailsService userDetailsService;
     private final SubjectService subjectService;
+    private final LabaService labaService;
 
 
     @Autowired
-    public AdminController(GroupService groupService, GroupValidator groupValidator, StudentService studentService, StudentValidator studentValidator, UserDetailsService userDetailsService, SubjectService subjectService) {
+    public AdminController(GroupService groupService, GroupValidator groupValidator, StudentService studentService, StudentValidator studentValidator, UserDetailsService userDetailsService, SubjectService subjectService, LabaService labaService) {
         this.groupService = groupService;
         this.groupValidator = groupValidator;
         this.studentService = studentService;
         this.studentValidator = studentValidator;
         this.userDetailsService = userDetailsService;
         this.subjectService = subjectService;
+        this.labaService = labaService;
     }
 
     @GetMapping("/groups")
@@ -253,12 +256,21 @@ public class AdminController {
     @ResponseBody
     @PostMapping("/subjects/{subject_id}/createLaba")
     public ResponseEntity<Object> createNewLaba(@PathVariable("subject_id") Integer subject_id, @RequestBody Request request){
-        if (subjectService.createNewLabaForSubject(subject_id, request.getNewLabaId(), request.getNewLabaTitle())){
+        if (subjectService.createNewLabaForSubject(subject_id, request.getNewLabaNum(), request.getNewLabaTitle())){
             Integer newQuantOfLabas = subjectService.findById(subject_id).getQuantOfLabs();
             return new ResponseEntity<>(newQuantOfLabas, HttpStatusCode.valueOf(200));
         }
         return new ResponseEntity<>(HttpStatusCode.valueOf(404));
     }
+
+    @PostMapping("/subjects/{subject_id}/deleteLaba")
+    public String deleteLabaForSubject(@RequestBody Request request, Model model, @PathVariable("subject_id") Integer subject_id){
+        labaService.deleteById(request.getLaba_id());
+        model.addAttribute("subject", subjectService.findById(subject_id));
+        return "admin/subjectsLabas";
+    }
+
+
 }
 enum Roles{
     ROLE_USER,

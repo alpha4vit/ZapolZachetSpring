@@ -36,17 +36,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
                 .authorizeHttpRequests()
-                //.requestMatchers("/teacher/**").hasAnyRole("TEACHER", "ADMIN")
-               // .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/teacher/**").hasAnyRole("TEACHER", "ADMIN")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
-                .loginProcessingUrl("/login")
+                .loginPage("/auth/login")
+                .loginProcessingUrl("/process_login")
                 .successHandler(new AuthenticationSuccessHandler() {
                     @Override
-                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
                         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
                         String role  = userDetails.getUser().getRole();
                         if (role.equals("ROLE_USER"))
@@ -61,7 +62,7 @@ public class SecurityConfig {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login");
+                .logoutSuccessUrl("/auth/login");
 
         return http.build();
     }

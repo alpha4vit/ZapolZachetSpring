@@ -6,32 +6,36 @@ import org.springframework.stereotype.Component;
 public class Request {
     private Integer group_id;
     private Integer subject_id;
+    private Integer laba_id;
 
     private String surnameSearch;
     private Integer labaNumFilter;
 
     private Integer student_id;
-    private Integer labaNumZachet;
+    private Integer newZachetLabaId;
     private String value;
 
+
     private Integer newQuantOfLabas;
-    private Integer newLabaId;
+    private Integer newLabaNum;
     private String newLabaTitle;
+
 
 
     private String type;
 
-    public Request(Integer group_id, Integer subject_id, String surnameSearch, Integer labaNumFilter, Integer student_id,
-                   Integer labaNumZachet, String value, Integer newQuantOfLabas, Integer newLabaId, String newLabaTitle, String type) {
+    public Request(Integer group_id, Integer subject_id, Integer labaId, String surnameSearch, Integer labaNumFilter, Integer student_id,
+                   Integer labaNumZachet, String value, Integer newQuantOfLabas, Integer newLabaNum, String newLabaTitle, String type) {
         this.group_id = group_id;
         this.subject_id = subject_id;
+        laba_id = labaId;
         this.surnameSearch = surnameSearch;
         this.labaNumFilter = labaNumFilter;
         this.student_id = student_id;
-        this.labaNumZachet = labaNumZachet;
+        this.newZachetLabaId = labaNumZachet;
         this.value = value;
         this.newQuantOfLabas = newQuantOfLabas;
-        this.newLabaId = newLabaId;
+        this.newLabaNum = newLabaNum;
         this.newLabaTitle = newLabaTitle;
         this.type = type;
     }
@@ -79,12 +83,12 @@ public class Request {
         this.student_id = student_id;
     }
 
-    public Integer getLabaNumZachet() {
-        return labaNumZachet;
+    public Integer getNewZachetLabaId() {
+        return newZachetLabaId;
     }
 
-    public void setLabaNumZachet(Integer labaNumZachet) {
-        this.labaNumZachet = labaNumZachet;
+    public void setNewZachetLabaId(Integer newZachetLabaId) {
+        this.newZachetLabaId = newZachetLabaId;
     }
 
     public String getValue() {
@@ -111,12 +115,12 @@ public class Request {
         this.type = type;
     }
 
-    public Integer getNewLabaId() {
-        return newLabaId;
+    public Integer getNewLabaNum() {
+        return newLabaNum;
     }
 
-    public void setNewLabaId(Integer newLabaId) {
-        this.newLabaId = newLabaId;
+    public void setNewLabaNum(Integer newLabaNum) {
+        this.newLabaNum = newLabaNum;
     }
 
     public String getNewLabaTitle() {
@@ -125,5 +129,13 @@ public class Request {
 
     public void setNewLabaTitle(String newLabaTitle) {
         this.newLabaTitle = newLabaTitle;
+    }
+
+    public Integer getLaba_id() {
+        return laba_id;
+    }
+
+    public void setLaba_id(Integer laba_id) {
+        this.laba_id = laba_id;
     }
 }

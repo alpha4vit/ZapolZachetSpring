@@ -22,7 +22,6 @@ public class TeacherController {
     private final SubjectService subjectService;
     private final StudentService studentService;
     private final ZachetService zachetService;
-    private final ZachetValidator zachetValidator;
     private final LabaService labaService;
 
     @Autowired
@@ -31,7 +30,6 @@ public class TeacherController {
         this.subjectService = subjectService;
         this.studentService = studentService;
         this.zachetService = zachetService;
-        this.zachetValidator = zachetValidator;
         this.labaService = labaService;
     }
 
@@ -70,8 +68,9 @@ public class TeacherController {
     public String newZachet(@RequestBody Request request, BindingResult bindingResult, Model model){
         Group group = groupService.findById(request.getGroup_id());
         Subject subject = subjectService.findById(request.getSubject_id());
-        zachetService.update(new Zachet(studentService.findById(request.getStudent_id()),
-                 request.getValue(), labaService.findById(request.getNewLabaId())));
+        Student student = studentService.findById(request.getStudent_id());
+        zachetService.update(new Zachet(student,
+                 request.getValue(), labaService.findById(request.getNewZachetLabaId())));
         List<Student> students = group.selectStudentsByFilter(request.getSurnameSearch(), request.getLabaNumFilter(), subject);
         if (students == null)
             students = group.getStudents();
@@ -79,8 +78,8 @@ public class TeacherController {
                 .addAttribute("students", students)
                 .addAttribute("zachetService", zachetService)
                 .addAttribute("request", request)
-                .addAttribute("zachetModel", new ZachetModel());
-        return "teachers/groupInfo";
+                .addAttribute("zachetModel", new ZachetModel(student));
+        return "users/table";
     }
 
     @PostMapping("group/select")
@@ -95,6 +94,10 @@ public class TeacherController {
                 .addAttribute("zachetService", zachetService)
                 .addAttribute("zachetModel", new ZachetModel())
                 .addAttribute("request", request);
+        if (request.getLabaNumFilter() != null || request.getSurnameSearch() != null){
+            return "users/table";
+        }
         return "teachers/groupInfo";
     }
+
 }

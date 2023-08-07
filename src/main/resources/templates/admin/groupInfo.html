@@ -34,15 +34,20 @@
         <br/>
         <input type="submit" value="Сохранить!"/>
     </form>
-    <div th:each="student : ${group.getStudents()}" >
-        <p th:text="${student.getFio()}"></p>
-        <form th:method="post" th:action="@{/admin/groups/{group_id}/{student_id}/deleteStudent(group_id=${group.getId()}, student_id=${student.getId()})}">
-            <button type="submit">Удалить!</button>
-        </form>
-        <form th:action="@{/admin/groups/{group_id}/{student_id}/editStudent(group_id=${group.getId()}, student_id=${student.getId()})}">
-            <button type="submit">Изменить</button>
-        </form>
-    </div>
+    <hr/>
+    <ul class="link-ul" th:each="student : ${group.getStudents()}">
+        <li class="link-list"><p th:text="${student.getFio()}"></p></li>
+        <li class="form-list">
+            <form th:method="post" th:action="@{/admin/groups/{group_id}/{student_id}/deleteStudent(group_id=${group.getId()}, student_id=${student.getId()})}">
+                <button type="submit">Удалить!</button>
+            </form>
+        </li>
+        <li class="form-list">
+            <form th:action="@{/admin/groups/{group_id}/{student_id}/editStudent(group_id=${group.getId()}, student_id=${student.getId()})}">
+                <button type="submit">Изменить</button>
+            </form>
+        </li>
+    </ul>
 </div>
 </body>
 </html>

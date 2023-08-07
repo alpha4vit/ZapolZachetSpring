@@ -6,8 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "groups")
@@ -59,7 +58,9 @@ public class Group {
         this.name = name;
     }
 
-    public List<Student> getStudents() {
+    public List<Student> getStudents()
+    {
+        students.sort(((o1, o2) -> {return o1.getFio().compareTo(o2.getFio());}));
         return students;
     }
 
@@ -81,7 +82,7 @@ public class Group {
             for (Student st : this.students){
                 List<Zachet> zachets = st.getZachety();
                 for (int i =0; i < zachets.size(); ++i) {
-                    if (zachets.get(i).getStudent().getFio().startsWith(surnameSearch) && zachets.get(i).getValue().equalsIgnoreCase("-") && labaNum == zachets.get(i).getLaba().getNumber() && zachets.get(i).getLaba().getSubject().equals(subject)) {
+                    if (st.getFio().toLowerCase().startsWith(surnameSearch.toLowerCase()) && zachets.get(i).getValue().equalsIgnoreCase("-") && labaNum == zachets.get(i).getLaba().getNumber() && zachets.get(i).getLaba().getSubject().equals(subject)) {
                         selection.add(st);
                         break;
                     }
@@ -90,7 +91,7 @@ public class Group {
         }
         else if (surnameSearch != null && !surnameSearch.equals("")) {
             for (Student st : this.students) {
-                if (st.getFio().startsWith(surnameSearch))
+                if (st.getFio().toLowerCase().startsWith(surnameSearch.toLowerCase()))
                     selection.add(st);
             }
         }
@@ -107,6 +108,7 @@ public class Group {
         }
         else
             return null;
+        selection.sort(((o1, o2) -> {return o1.getFio().compareTo(o2.getFio());}));
         return selection;
     }
 

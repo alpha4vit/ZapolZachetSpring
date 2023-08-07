@@ -15,8 +15,15 @@
     <input id="newlaba_title" type="text"/>
     <input type="button" value="Сохранить!" onclick="saveNewLaba()">
 </form>
-<div th:each="laba : ${subject.getLabas()}">
-    <p th:text="${laba.getTitle()+' '+laba.getNumber()}"></p>
-</div>
 
+<ul class="link-ul" th:each="laba : ${subject.getLabas()}">
+    <li class="link-list"> <p th:text="${laba.getTitle()+' '+laba.getNumber()}"></p></li>
+    <li class="form-list">
+        <form>
+            <input id="laba_id" type="hidden" th:value="${laba.getId()}"/>
+            <input id="subject_id" type="hidden" th:value="${subject.getId()}">
+            <input type="button" class="button-list" value="Удалить!" onclick="deleteLaba()">
+        </form>
+    </li>
+</ul>
 

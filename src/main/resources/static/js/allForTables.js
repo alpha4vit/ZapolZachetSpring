@@ -36,7 +36,11 @@ function selection(type){
     });
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            document.getElementById('table').innerHTML = xhr.responseText;
+            if (type === 'teacher-filter'){
+                document.querySelector('.data').innerHTML = xhr.responseText;
+            }
+            else
+                document.getElementById('table').innerHTML = xhr.responseText;
         }
     };
 
@@ -51,7 +55,7 @@ function addNewZachet(){
     var group_id = document.querySelector(".group-select").value;
     var subject_id = document.querySelector(".subject-select").value;
     var student_id = document.querySelector("#student_idZachet").value;
-    var laba_id = document.querySelector("#labaIdZachet").value;
+    var newZachetLabaId = document.querySelector("#labaIdZachet").value;
     var value = document.querySelector("#valueZachet").value;
     var surnameSearch = document.querySelector("#surnameFilter").value;
     var labaNumFilter = document.querySelector("#labaNumFilter").value;
@@ -60,14 +64,14 @@ function addNewZachet(){
         group_id:group_id,
         subject_id:subject_id,
         student_id:student_id,
-        newLabaId:laba_id,
+        newZachetLabaId:newZachetLabaId,
         value:value,
         surnameSearch:surnameSearch,
         labaNumFilter:labaNumFilter
     });
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            document.getElementById('table').innerHTML = xhr.responseText;
+            document.querySelector('.data').innerHTML = xhr.responseText;
         }
     };
     xhr.send(data);

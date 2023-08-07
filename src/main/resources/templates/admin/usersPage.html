@@ -31,9 +31,10 @@
     <input type="submit" value="Поиск"/>
 </form>
 
-<div th:each="user : ${users}">
-  <a th:text="${user.getId()+', '+user.getName()}" th:href="@{/admin/users/{id}(id=${user.getId()})}"></a>
-  <br/>
-</div>
+
+<ul class="link-ul" th:each="user : ${users}">
+    <li class="link-list"> <a th:text="${user.getId()+', '+user.getName()}" th:href="@{/admin/users/{id}(id=${user.getId()})}"></a></li>
+</ul>
+
 </body>
 </html>

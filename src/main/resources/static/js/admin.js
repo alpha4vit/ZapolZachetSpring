@@ -95,3 +95,20 @@ function saveNewLaba(){
     }));
 
 }
+
+function deleteLaba(){
+    var subject_id = document.querySelector("#subject_id").value;
+    var laba_id = document.querySelector("#laba_id").value;
+    console.log(laba_id);
+    var xhr = new XMLHttpRequest();
+    xhr.open("post", path+`/subjects/${subject_id}/deleteLaba`, true);
+    xhr.setRequestHeader("content-type", 'application/json');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            document.querySelector('.content').innerHTML = xhr.responseText;
+        }
+    };
+    xhr.send(JSON.stringify({
+        laba_id:laba_id
+    }));
+}

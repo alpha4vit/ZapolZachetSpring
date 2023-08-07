@@ -34,15 +34,16 @@
   <input type="submit" value="Добавить!"/>
   <div style="color: darkred" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
 </form>
-<div th:each="subject : ${subjects}">
-    <span>
-        <a th:href="@{/admin/subjects/{id}(id=${subject.getId()})}" th:text="${subject.getTitle()}"></a>
-        </span>
-  <span>
-        <form th:method = "patch" th:action="@{/admin/subjects/deleteSubject/{id}(id = ${subject.getId()})}">
-            <button>Удалить!</button>
-        </form>
-    </span>
-</div>
+<br/>
+<hr/>
+<br/>
+<ul class="link-ul" th:each="subject : ${subjects}">
+  <li class="link-list"> <a th:href="@{/admin/subjects/{id}(id=${subject.getId()})}" th:text="${subject.getTitle()}"></a></li>
+  <li class="form-list">
+    <form th:method = "patch" th:action="@{/admin/subjects/deleteSubject/{id}(id = ${subject.getId()})}">
+      <button>Удалить!</button>
+    </form>
+  </li>
+</ul>
 </body>
 </html>

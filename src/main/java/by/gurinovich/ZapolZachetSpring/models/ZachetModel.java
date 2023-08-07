@@ -22,6 +22,10 @@ public class ZachetModel {
         this.laba_id = laba_id;
     }
 
+    public ZachetModel(Student student) {
+        this.student = student;
+    }
+
     public String getValue() {
         return value;
     }

@@ -36,10 +36,12 @@ public class SubjectService {
         return subjectRepository.findById(id).orElse(null);
     }
 
+    @Transactional
     public Subject save(Subject subject){
         return subjectRepository.save(subject);
     }
 
+    @Transactional
     public void deleteById(Integer id){
         subjectRepository.deleteById(id);
     }

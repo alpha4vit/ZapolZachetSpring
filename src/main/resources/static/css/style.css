@@ -190,3 +190,51 @@ a {
     color: inherit;
     background-color: transparent;
 }
+
+
+/* оформление списков */
+
+.link-ul {
+    list-style: none;
+    padding: 0;
+    margin: 0; /* Убираем отступы слева и сверху */
+}
+
+
+.link-list {
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+    padding-right: 20px;
+    position: relative;
+}
+
+.link-list:hover {
+    color: green;
+}
+
+/* Стиль для формы */
+.form-list {
+    display: inline-block;
+}
+
+/* Стиль для кнопки */
+.button-list {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-left: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.button-list:hover {
+    background-color: #45a049;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

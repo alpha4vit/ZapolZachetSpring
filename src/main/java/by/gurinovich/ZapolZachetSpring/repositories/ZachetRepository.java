@@ -15,4 +15,6 @@ public interface ZachetRepository extends JpaRepository<Zachet, Integer> {
     List<Zachet> findByStudent(Student student);
 
     Optional<Zachet> findByStudentAndLaba(Student student, Laba laba);
+
+    void deleteAllByLaba(Laba laba);
 }

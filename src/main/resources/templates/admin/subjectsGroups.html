@@ -17,11 +17,14 @@
   <input type="button" onclick="addNewGroupForSubject()" value="Добавить">
 </form>
 
-<div th:each="group : ${groups}">
-  <p th:text="${group.getName()}"></p>
-  <form>
-    <input id="group_id" type="hidden" th:value="${group.getId()}"/>
-    <input type="button" value="Удалить!" onclick="deleteGroupFromSubject()"/>
-  </form>
-</div>
+
+<ul class="link-ul" th:each="group : ${groups}">
+  <li class="link-list"><p th:text="${group.getName()}"></p></li>
+  <li class="form-list">
+    <form>
+      <input id="group_id" type="hidden" th:value="${group.getId()}"/>
+      <input type="button" value="Удалить!" onclick="deleteGroupFromSubject()"/>
+    </form>
+  </li>
+</ul>
 

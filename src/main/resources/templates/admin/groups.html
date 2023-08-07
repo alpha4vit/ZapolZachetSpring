@@ -31,16 +31,14 @@
     <input type="submit" value="Добавить!"/>
     <div style="color: darkred" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
 </form>
-<div th:each="group : ${groups}">
-    <span>
-        <a th:href="@{/admin/groups/{id}(id=${group.getId()})}" th:text="${group.getName()}"></a>
-        </span>
-    <span>
+<ul class="link-ul" th:each="group : ${groups}">
+    <li class="link-list"> <a th:href="@{/admin/groups/{id}(id=${group.getId()})}" th:text="${group.getName()}"></a></li>
+    <li class="form-list">
         <form th:method = "patch" th:action="@{/admin/groups/deleteGroup/{id}(id = ${group.getId()})}">
-            <button>Удалить!</button>
+            <input class="button-list" type="submit" value="Удалить!"/>
         </form>
-    </span>
-
-</div>
+    </li>
+    <li class="link-list"><hr/></li>
+</ul>
 </body>
 </html>
