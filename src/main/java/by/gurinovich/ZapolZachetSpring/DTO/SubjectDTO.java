@@ -46,7 +46,7 @@ public class SubjectDTO {
         SubjectDTO dto = new SubjectDTO();
         dto.setId(subject.getId());
         dto.setTitle(subject.getTitle());
-        dto.setQuantOfLabs(subject.getQuantOfLabs());
+        dto.setQuantOfLabs(subject.getCountOfLabs());
         return dto;
     }
 }

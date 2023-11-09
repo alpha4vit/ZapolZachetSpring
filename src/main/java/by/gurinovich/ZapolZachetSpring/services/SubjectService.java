@@ -50,7 +50,7 @@ public class SubjectService {
     public boolean updateQuantOfLabas(Subject subject, Integer newQuant){
         if (newQuant <= 0)
             return false;
-        subject.setQuantOfLabs(newQuant);
+        subject.setCountOfLabs(newQuant);
         subjectRepository.save(subject);
         return true;
     }
@@ -95,8 +95,8 @@ public class SubjectService {
     public boolean createNewLabaForSubject(Integer subject_id, Integer labaNum, String title){
 
         Subject subject = subjectRepository.findById(subject_id).orElse(null);
-        Integer prevQuant = subject.getQuantOfLabs();
-        subject.setQuantOfLabs(prevQuant+1);
+        Integer prevQuant = subject.getCountOfLabs();
+        subject.setCountOfLabs(prevQuant+1);
         subjectRepository.save(subject);
 
         Laba laba = new Laba(labaNum, title, subject);

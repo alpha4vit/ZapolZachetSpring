@@ -60,16 +60,11 @@ public class UserController {
         Group group = groupService.findById(request.getGroup_id());
         Subject subject = subjectService.findById(request.getSubject_id());
         model.addAttribute("students", group.getStudents())
-                .addAttribute("quantOfLabas", subject.getQuantOfLabs())
+                .addAttribute("quantOfLabas", subject.getCountOfLabs())
                 .addAttribute("zachetService", zachetService)
                 .addAttribute("current_user", user)
                 .addAttribute("groupANDsubject", new GroupAndSubject(group, subject));
         return "users/table";
-    }
-
-    @GetMapping("/registration")
-    public String registrationPage(@ModelAttribute("user") User user){
-        return "users/registrationPage";
     }
 
 
@@ -78,10 +73,10 @@ public class UserController {
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(System.out::println);
-            return "users/registrationPage";
+            return "auth_v2/authorization";
         }
         registrationService.register(user);
-        return "redirect:/login";
+        return "redirect:/auth";
     }
 
     @GetMapping("/profile")

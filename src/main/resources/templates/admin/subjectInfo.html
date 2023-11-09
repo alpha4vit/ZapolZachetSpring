@@ -27,7 +27,7 @@
 </header>
 <div>
   <h3 th:text="${subject.getTitle()}"></h3>
-  <div class="quant-content"><p th:text="${'Количество лабораторных работ: '+subject.getQuantOfLabs()}"></p></div>
+  <div class="quant-content"><p th:text="${'Количество лабораторных работ: '+subject.getCountOfLabs()}"></p></div>
 
   <form>
     <input type="hidden" th:value="${subject.id}" id="subject_id"/>

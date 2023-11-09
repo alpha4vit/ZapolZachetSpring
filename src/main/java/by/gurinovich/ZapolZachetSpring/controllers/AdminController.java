@@ -257,7 +257,7 @@ public class AdminController {
     @PostMapping("/subjects/{subject_id}/createLaba")
     public ResponseEntity<Object> createNewLaba(@PathVariable("subject_id") Integer subject_id, @RequestBody Request request){
         if (subjectService.createNewLabaForSubject(subject_id, request.getNewLabaNum(), request.getNewLabaTitle())){
-            Integer newQuantOfLabas = subjectService.findById(subject_id).getQuantOfLabs();
+            Integer newQuantOfLabas = subjectService.findById(subject_id).getCountOfLabs();
             return new ResponseEntity<>(newQuantOfLabas, HttpStatusCode.valueOf(200));
         }
         return new ResponseEntity<>(HttpStatusCode.valueOf(404));

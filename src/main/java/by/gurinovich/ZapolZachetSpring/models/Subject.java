@@ -18,9 +18,9 @@ public class Subject {
     @NotNull
     private String title;
 
-    @Column(name = "quantoflabs")
+    @Column(name = "count_of_labas")
     @NotNull
-    private Integer quantOfLabs;
+    private Integer countOfLabs;
 
     @ManyToMany
     @JoinTable(
@@ -35,10 +35,10 @@ public class Subject {
 
     public Subject() {}
 
-    public Subject(int id, String title, Integer quantOfLabs, List<Group> groups, List<Laba> labas) {
+    public Subject(int id, String title, Integer countOfLabs, List<Group> groups, List<Laba> labas) {
         this.id = id;
         this.title = title;
-        this.quantOfLabs = quantOfLabs;
+        this.countOfLabs = countOfLabs;
         this.groups = groups;
         this.labas = labas;
     }
@@ -59,12 +59,12 @@ public class Subject {
         this.title = title;
     }
 
-    public Integer getQuantOfLabs() {
-        return quantOfLabs;
+    public Integer getCountOfLabs() {
+        return countOfLabs;
     }
 
-    public void setQuantOfLabs(Integer quantOfLabs) {
-        this.quantOfLabs = quantOfLabs;
+    public void setCountOfLabs(Integer quantOfLabs) {
+        this.countOfLabs = quantOfLabs;
     }
 
     public List<Group> getGroups() {

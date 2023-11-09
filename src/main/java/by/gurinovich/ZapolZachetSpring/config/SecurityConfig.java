@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/auth/login")
+                .loginPage("/auth")
                 .loginProcessingUrl("/process_login")
                 .successHandler(new AuthenticationSuccessHandler() {
                     @Override
