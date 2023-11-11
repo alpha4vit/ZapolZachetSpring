@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - codingnepalweb.com -->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ===== Iconscout CSS ===== -->
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+
+  <!-- ===== CSS ===== -->
+  <link rel="stylesheet" th:href="@{/css/style-auth.css}">
+
+  <title>Registration Form</title>
+</head>
+<body>
+
+<div class="container active">
+  <div class="forms">
+
+    <!-- Registration Form -->
+    <div class="form signup">
+      <span class="title">Registration</span>
+
+      <form th:object="${user}" th:method="post" th:action="@{/registration}">
+        <div class="input-field">
+          <input th:field="*{name}" type="text" placeholder="Введите имя пользователя" required>
+          <i class="uil uil-user"></i>
+        </div>
+        <span class="text">
+          <div style="color: darkred" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </span>
+        <div class="input-field">
+          <input th:field="*{email}" type="text" placeholder="Введите электронную почту" required>
+          <i class="uil uil-envelope icon"></i>
+        </div>
+        <span class="text">
+          <div style="color: darkred" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </span>
+        <div class="input-field">
+          <input th:field="*{password}"  type="password" class="password" placeholder="Введите пароль" required>
+          <i class="uil uil-lock icon"></i>
+          <i class="uil uil-eye-slash showHidePw"></i>
+        </div>
+        <span class="text">
+          <div style="color: darkred" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+        </span>
+        <!--                <div class="input-field">-->
+        <!--                    <input type="password" class="password" placeholder="Confirm a password" required>-->
+        <!--                    <i class="uil uil-lock icon"></i>-->
+        <!--                    <i class="uil uil-eye-slash showHidePw"></i>-->
+        <!--                </div>-->
+        <div class="checkbox-text">
+          <div class="checkbox-content">
+            <input type="checkbox" id="termCon">
+            <label for="termCon" class="text">I accepted all terms and conditions</label>
+          </div>
+        </div>
+
+        <div class="input-field button">
+          <input type="submit" value="Sign up">
+        </div>
+      </form>
+
+        <div class="login-signup">
+                      <span class="text">Already a member?
+                          <a th:href="@{/auth}" class="text login-link">Login Now</a>
+                      </span>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/js/auth.js"></script>
+</body>
+</html>

@@ -12,7 +12,7 @@
     <!-- ===== CSS ===== -->
     <link rel="stylesheet" th:href="@{/css/style-auth.css}">
 
-    <title>Login & Registration Form</title>
+    <title>Registration</title>
 </head>
 <body>
 
@@ -27,22 +27,23 @@
                     <i class="uil uil-envelope icon"></i>
                 </div>
                 <div class="input-field">
-                    <input name="password" type="password" class="password" placeholder="Enter your password" required>
+                    <input  name="password" type="password" class="password" placeholder="Enter your password" required>
                     <i class="uil uil-lock icon"></i>
                     <i class="uil uil-eye-slash showHidePw"></i>
                 </div>
-
+                <span class="text">
+                    <div style="color: darkred" th:text="${error}"></div>
+                 </span>
                 <div class="checkbox-text">
                     <div class="checkbox-content">
                         <input type="checkbox" id="logCheck">
                         <label for="logCheck" class="text">Remember me</label>
                     </div>
-
                     <a href="#" class="text">Forgot password?</a>
                 </div>
 
                 <div class="input-field button">
-                    <button class="input-field button" type="submit">Login</button>
+                    <input type="submit" value="Login">
                 </div>
             </form>
 
@@ -69,6 +70,7 @@
                 <div class="input-field">
                     <input th:field="*{password}"  type="password" class="password" placeholder="Введите пароль" required>
                     <i class="uil uil-lock icon"></i>
+                    <i class="uil uil-eye-slash showHidePw"></i>
                 </div>
 <!--                <div class="input-field">-->
 <!--                    <input type="password" class="password" placeholder="Confirm a password" required>-->
@@ -83,7 +85,7 @@
                 </div>
 
                 <div class="input-field button">
-                    <button class="input-field button" type="submit">Sign up</button>
+                    <input type="submit" value="Sign up">
                 </div>
             </form>
 

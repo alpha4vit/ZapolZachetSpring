@@ -112,3 +112,13 @@ function deleteLaba(){
         laba_id:laba_id
     }));
 }
+
+function submitOnchange() {
+    document.getElementById("form-submit-onchange").submit();
+}
+
+function submitOnEnter(){
+    if (event.key === 'Enter') {
+        document.getElementById("form-submit-onenter").submit();
+    }
+}

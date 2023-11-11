@@ -14,6 +14,7 @@ import by.gurinovich.ZapolZachetSpring.services.auth.UserDetailsService;
 import by.gurinovich.ZapolZachetSpring.utils.validotors.GroupValidator;
 import by.gurinovich.ZapolZachetSpring.utils.validotors.StudentValidator;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -23,28 +24,20 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.relation.Role;
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminController {
     private final GroupService groupService;
     private final GroupValidator groupValidator;
     private final StudentService studentService;
-    private final StudentValidator studentValidator;
     private final UserDetailsService userDetailsService;
     private final SubjectService subjectService;
     private final LabaService labaService;
 
-
-    @Autowired
-    public AdminController(GroupService groupService, GroupValidator groupValidator, StudentService studentService, StudentValidator studentValidator, UserDetailsService userDetailsService, SubjectService subjectService, LabaService labaService) {
-        this.groupService = groupService;
-        this.groupValidator = groupValidator;
-        this.studentService = studentService;
-        this.studentValidator = studentValidator;
-        this.userDetailsService = userDetailsService;
-        this.subjectService = subjectService;
-        this.labaService = labaService;
-    }
 
     @GetMapping("/groups")
     public String showAdminPage(Model model, @ModelAttribute("group") Group group){
@@ -56,7 +49,7 @@ public class AdminController {
         model
                 .addAttribute("groups", groupService.getGroups())
                 .addAttribute("current_user", user);
-        return "admin/groups";
+        return "admin/v2/groups";
     }
 
     @PatchMapping("/groups/deleteGroup/{id}")
@@ -65,7 +58,7 @@ public class AdminController {
         return "redirect:/admin/groups";
 }
 
-    @PostMapping("/groups/createNewGroup")
+    @PostMapping("/groups/new")
     public String createNewGroup(@ModelAttribute("group") @Valid Group group, BindingResult bindingResult, Model model){
         groupValidator.validate(group, bindingResult);
         if (bindingResult.hasErrors()) {
@@ -75,6 +68,7 @@ public class AdminController {
         groupService.save(group);
         return "redirect:/admin/groups";
     }
+
 
     @GetMapping("/groups/{id}")
     public String getInfoAboutGroup(@PathVariable("id") int id, Model model, @ModelAttribute("newStudent") Student student){
@@ -86,45 +80,67 @@ public class AdminController {
         model
                 .addAttribute("group", groupService.findById(id))
                 .addAttribute("current_user", user);
-        return "admin/groupInfo";
+        return "admin/v2/groupInfo";
     }
 
-    @PostMapping("/groups/{group_id}/addStudent")
-    public String addStudent(@PathVariable("group_id") int group_id, @ModelAttribute("newStudent") @Valid Student student, BindingResult bindingResult, Model model){
-        studentValidator.validate(student, bindingResult);
-        if (bindingResult.hasErrors()){
-            model.addAttribute("group", groupService.findById(group_id));
-            return "admin/groupInfo";
+    @GetMapping("/groups/{id}/edit")
+    public String editGroupPage(@PathVariable("id") int id, Model model){
+        model
+                .addAttribute("group_id", id)
+                .addAttribute("group", groupService.findById(id));
+        return "admin/v2/groupEditPage";
+    }
+
+    @PatchMapping("/groups/{group_id}/edit")
+    public String editGroup(@PathVariable("group_id") Integer groupId,
+                            @ModelAttribute("student") @Valid Group group,
+                            BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return "admin/v2/studentEditPage";
         }
-        studentService.save(student, group_id);
-        return String.format("redirect:/admin/groups/%d", group_id);
-
+        groupService.update(group, groupId);
+        return "redirect:/admin/groups";
     }
 
-    @PostMapping("/groups/{group_id}/{student_id}/deleteStudent")
-    public String deleteStudent(@PathVariable("group_id") int group_id, @PathVariable("student_id") int student_id){
-        studentService.deleteStudentById(student_id);
-        return String.format("redirect:/admin/groups/%d", group_id);
+    @DeleteMapping("/groups/{id}/delete")
+    public String deleteGroup(@PathVariable("id") Integer id) {
+        groupService.deleteById(id);
+        return "redirect:/admin/groups";
     }
 
-    @GetMapping("/groups/{group_id}/{student_id}/editStudent")
-    public String editStudentPage(@PathVariable("group_id") int group_id, @PathVariable("student_id") int student_id, Model model){
+
+    @GetMapping("/groups/{group_id}/students/{student_id}/edit")
+    public String editStudentPage(@PathVariable("group_id") int groupId, @PathVariable("student_id") int studentId, Model model){
         UserDetails user = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails){
             user = (UserDetails) principal;
         }
-        model.addAttribute("group_id", group_id)
-                .addAttribute("student", studentService.findById(student_id))
-                .addAttribute("student_id", student_id)
+        model.addAttribute("group_id", groupId)
+                .addAttribute("student", studentService.findById(studentId))
+                .addAttribute("student_id", studentId)
                 .addAttribute("current_user", user);
-        return "admin/studentEditPage";
+        return "admin/v2/studentEditPage";
     }
 
-    @PatchMapping("/groups/{group_id}/{student_id}/editStudent")
-    public String editStudent(@PathVariable("group_id") int group_id, @PathVariable("student_id") int student_id, @ModelAttribute("student") @Valid Student student, BindingResult bindingResult, Model model){
+    @DeleteMapping("/groups/{group_id}/students/{student_id}/delete")
+    public String deleteStudent(@PathVariable("group_id") Integer groupId,
+                                @PathVariable("student_id") Integer studentId) {
+        studentService.deleteStudentById(studentId);
+        return String.format("redirect:/admin/groups/%d", groupId);
+    }
+
+    @PostMapping("/groups/{group_id}/students/add")
+    public String addStudent(@PathVariable("group_id") int group_id,
+            @ModelAttribute("newStudent") Student student){
+        studentService.save(student, group_id);
+        return String.format("redirect:/admin/groups/%d", group_id);
+    }
+
+    @PatchMapping("/groups/{group_id}/students/{student_id}/edit")
+    public String editStudent(@PathVariable("group_id") int group_id, @PathVariable("student_id") int student_id, @ModelAttribute("student") @Valid Student student, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
-            return "admin/studentEditPage";
+            return "admin/v2/studentEditPage";
         }
         studentService.update(student, student_id, group_id);
         return String.format("redirect:/admin/groups/%d", group_id);
@@ -132,24 +148,28 @@ public class AdminController {
 
 
     @GetMapping("/users")
-    public String getUsers(Model model){
+    public String getUsers(Model model,
+                           @ModelAttribute("userForEdit") User userForEdit,
+                           @ModelAttribute("search") String search){
         UserDetails user = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails){
             user = (UserDetails) principal;
         }
-        model.addAttribute("users", userDetailsService.getAllUsers().stream().sorted((o1, o2) -> Integer.compare(o1.getId(), o2.getId())))
-                .addAttribute("search", "")
-                .addAttribute("current_user", user);
-        return "admin/usersPage";
+        model.addAttribute("users", userDetailsService.getAllUsers().stream().sorted((o1, o2) -> Integer.compare(o1.getId(), o2.getId())).toList())
+                .addAttribute("current_user", user)
+                .addAttribute("roles", Roles.values());
+        return "admin/v2/usersPage";
     }
 
 
     @PostMapping("/users")
-    public String getSearchUsers(@RequestParam("search") String search, Model model){
+    public String getSearchUsers(@ModelAttribute("search") String search,
+                                 @ModelAttribute("userForEdit") User userForEdit,
+                                 Model model){
         model.addAttribute("users", userDetailsService.findByNameStartingWith(search))
-                .addAttribute("search", search);
-        return "admin/usersPage";
+                .addAttribute("roles", Roles.values());
+        return "admin/v2/usersPage";
     }
 
 
@@ -168,9 +188,14 @@ public class AdminController {
 
 
     @PatchMapping("/users/{id}/newRole")
-    public String selectUserRole(@PathVariable("id") int id, @ModelAttribute("user") User user){
+    public String selectUserRole(@PathVariable("id") int id,
+                                 @ModelAttribute("userForEdit") User user,
+                                 @ModelAttribute("search") String search,
+                                 Model model){
         userDetailsService.update(user, id);
-        return String.format("redirect:/admin/users/%d", user.getId());
+        model.addAttribute("users", userDetailsService.findByNameStartingWith(search))
+                .addAttribute("roles", Roles.values());
+        return "admin/v2/usersPage";
     }
 
     @GetMapping("/subjects")
@@ -195,7 +220,8 @@ public class AdminController {
         return "admin/subjects";
     }
 
-    @PatchMapping("/subjects/deleteSubject/{id}")
+
+    @DeleteMapping("/subjects/delete/{id}")
     public String deleteSubject(@PathVariable("id") int id) {
         subjectService.deleteById(id);
         return "redirect:/admin/subjects";

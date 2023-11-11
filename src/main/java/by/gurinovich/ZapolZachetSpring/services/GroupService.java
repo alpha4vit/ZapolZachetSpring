@@ -25,6 +25,12 @@ public class GroupService {
         this.studentRepository = studentRepository;
     }
 
+    @Transactional
+    public void update(Group group, Integer groupId){
+        group.setId(groupId);
+        groupRepository.save(group);
+    }
+
     public List<Group> getGroups(){
         return groupRepository.findAll();
     }

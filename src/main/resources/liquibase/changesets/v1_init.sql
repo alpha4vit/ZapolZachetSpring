@@ -36,3 +36,9 @@ create table if not exists users(
     email varchar not null ,
     role varchar(20)
 );
+
+create table if not exists group_subject(
+    subject_id bigint references subjects(id) not null,
+    group_id bigint references groups(id) not null ,
+    constraint group_subject_pk primary key (subject_id, group_id)
+);

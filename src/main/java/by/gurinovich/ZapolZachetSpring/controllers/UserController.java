@@ -67,13 +67,16 @@ public class UserController {
         return "users/table";
     }
 
+    @GetMapping("/registration")
+    public String registrationPage(@ModelAttribute("user") @Valid User user){
+        return "auth_v2/failed_registration";
+    }
 
     @PostMapping("/registration")
     public String registrationPage(@ModelAttribute("user") @Valid User user, BindingResult bindingResult){
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
-            bindingResult.getAllErrors().forEach(System.out::println);
-            return "auth_v2/authorization";
+            return "auth_v2/failed_registration";
         }
         registrationService.register(user);
         return "redirect:/auth";

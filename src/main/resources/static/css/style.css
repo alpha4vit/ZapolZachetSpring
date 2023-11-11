@@ -87,7 +87,7 @@ input[type="submit"],[type="button"]:active {
 }
 
 /* header */
-header {
+header .site-header{
     background-color: #5cb85c;
     color: #fff;
     width: 100%;
@@ -150,12 +150,12 @@ nav ul li {
 
 /* Выпадающий список */
 
-.dropdown {
+.dp-down {
     position: relative;
     display: inline-block;
 }
 
-.dropdown-content {
+.dp-content {
     position: absolute;
     top: 100%;
     left: 0;
@@ -167,11 +167,11 @@ nav ul li {
     z-index: 9999;
 }
 
-.dropdown:hover .dropdown-content {
+.dp-down:hover .dp-content {
     display: block;
 }
 
-.dropdown-item {
+.dp-item {
     display: block;
     padding: 10px;
     text-decoration: none;
@@ -181,7 +181,7 @@ nav ul li {
     border-radius: 5px; /* Добавлено свойство для закругления */
 }
 
-.dropdown-item:hover {
+.dp-item:hover {
     background-color: #51923e;
 }
 
