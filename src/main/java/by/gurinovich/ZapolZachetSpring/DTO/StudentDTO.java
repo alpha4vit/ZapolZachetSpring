@@ -1,5 +1,7 @@
-package by.gurinovich.ZapolZachetSpring.models;
+package by.gurinovich.ZapolZachetSpring.DTO;
 
+import by.gurinovich.ZapolZachetSpring.models.Group;
+import by.gurinovich.ZapolZachetSpring.models.Zachet;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -8,27 +10,18 @@ import lombok.Data;
 
 import java.util.List;
 
-@Entity
-@Table(name = "students")
 @Data
-public class Student {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class StudentDTO {
+
     private Long id;
 
-    @Column(name = "fio")
     @NotEmpty
     @NotNull
     @Size(min = 2, max = 50, message = "ФИО должно быть от 2 до 50 символов")
     private String fio;
 
-    @ManyToOne
     @JoinColumn(name = "group_id", referencedColumnName = "id")
-    private Group group;
+    private GroupDTO group;
 
-    @OneToMany(mappedBy = "student")
-    private List<Zachet> zachety;
-
-
+    private List<ZachetDTO> zachety;
 }

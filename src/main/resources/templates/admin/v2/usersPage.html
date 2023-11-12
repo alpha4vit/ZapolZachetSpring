@@ -51,13 +51,13 @@
                                             <th>Действие</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody class="users-tbody">
                                         <tr th:each="user : ${users}">
-                                            <td th:text="${user.getName()}" class="text-nowrap align-middle"><span>Имя пользователя</span></td>
+                                            <td th:text="${user.getUsername()}" class="text-nowrap align-middle"><span>Имя пользователя</span></td>
                                             <td th:text="${user.getEmail()}" class="text-nowrap align-middle"><span>Почта</span></td>
                                             <td th:text="${user.getRole()}" class="text-nowrap align-middle"><span>Роль</span></td>
                                             <td class="text-center align-middle">
-                                                <form id="form-submit-onchange" th:method="patch" th:object="${userForEdit}" th:action="@{/admin/users/{id}/newRole(id=${user.getId()})}">
+                                                <form id="form-submit-onchange" th:method="patch" th:object="${userForEdit}" th:action="@{/admin/users/{id}/role(id=${user.getId()})}">
                                                     <select onchange="submitOnchange()" th:field="${userForEdit.role}">
                                                         <option th:selected="${role == user.getRole()}" th:value="${role}" th:each="role : ${roles}" th:text="${role}"></option>
                                                     </select>
@@ -81,10 +81,10 @@
                         <div class="card-body">
                             <div>
                                 <div class="form-group">
-                                    <form id="form-submit-onenter" method="post" th:action="@{/admin/users}">
+                                    <form onsubmit="updateUsersBySearch()" id="form-search-users">
                                         <label>Поиск по имени: </label>
-                                        <input type="hidden" class="form-control w-100" name="role"/>
-                                        <input onkeypress="submitOnEnter()" th:value="${search}" class="form-control w-100" type="text" name="search" id="search"/>
+                                        <input th:value="${search}" class="form-control w-100" type="text" name="search" id="search"/>
+                                        <button type="submit"></button>
                                     </form>
                                 </div>
                             </div>

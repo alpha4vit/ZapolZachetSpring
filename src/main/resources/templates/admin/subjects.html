@@ -25,12 +25,10 @@
   </nav>
   <button class="dropdown-btn"><a href="/logout">Выйти</a></button>
 </header>
-<form th:method="post" th:object="${newSubject}" th:action = "@{/admin/subjects/createNewSubject}">
+<form th:method="post" th:object="${newSubject}" th:action = "@{/admin/subjects/create}">
   <label for="title">Введите название предмета: </label>
   <input type="text" th:field="*{title}" id="title"/>
   <br/>
-    <label for="quantOfLabas">Введите количество ЛР:</label>
-    <input type="text" th:field="*{quantOfLabs}" id="quantOfLabas"/>
   <input type="submit" value="Добавить!"/>
   <div style="color: darkred" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
 </form>

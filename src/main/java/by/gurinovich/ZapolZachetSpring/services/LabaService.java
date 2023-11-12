@@ -21,23 +21,28 @@ public class LabaService {
         this.zachetRepository = zachetRepository;
     }
 
-    public Laba findById(Integer id){
+    public Laba getById(Long id){
         return labaRepository.findById(id).orElse(null);
     }
 
-    public Laba findByNumberAndSubject(Integer number, Subject subject){
+    public Laba getByNumberAndSubject(Integer number, Subject subject){
         return labaRepository.findByNumberAndSubject(number, subject).orElse(null);
     }
 
     @Transactional
     public Laba save(Integer number, String title, Subject subject){
         Optional<Laba> temp = labaRepository.findByNumberAndSubject(number, subject);
-        return temp.orElseGet(() -> labaRepository.save(new Laba(number, title, subject)));
+        return temp.orElseGet(() ->
+                labaRepository.save(Laba.builder()
+                                .title(title)
+                                .number(number)
+                                .subject(subject)
+                        .build()));
     }
 
     @Transactional
-    public void deleteById(Integer laba_id){
-        Laba laba =  labaRepository.findById(laba_id).orElse(null);
+    public void deleteById(Long labaId){
+        Laba laba =  labaRepository.findById(labaId).orElse(null);
         zachetRepository.deleteAllByLaba(laba);
         labaRepository.delete(laba);
     }

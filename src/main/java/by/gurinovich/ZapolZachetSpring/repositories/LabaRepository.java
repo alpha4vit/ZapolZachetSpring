@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface LabaRepository extends JpaRepository<Laba, Integer> {
+public interface LabaRepository extends JpaRepository<Laba, Long> {
     Optional<Laba> findByNumberAndSubject(Integer number, Subject subject);
 }

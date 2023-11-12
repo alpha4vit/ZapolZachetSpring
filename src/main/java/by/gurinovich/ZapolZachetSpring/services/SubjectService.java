@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static by.gurinovich.ZapolZachetSpring.utils.validotors.LabaValidator.validateLaba;
 
@@ -28,11 +29,11 @@ public class SubjectService {
         this.zachetRepository = zachetRepository;
     }
 
-    public List<Subject> getSubjects(){
+    public List<Subject> getAll(){
         return subjectRepository.findAll();
     }
 
-    public Subject findById(int id){
+    public Subject getById(Long id){
         return subjectRepository.findById(id).orElse(null);
     }
 
@@ -42,22 +43,14 @@ public class SubjectService {
     }
 
     @Transactional
-    public void deleteById(Integer id){
+    public void deleteById(Long id){
         subjectRepository.deleteById(id);
     }
 
-    @Transactional
-    public boolean updateQuantOfLabas(Subject subject, Integer newQuant){
-        if (newQuant <= 0)
-            return false;
-        subject.setCountOfLabs(newQuant);
-        subjectRepository.save(subject);
-        return true;
-    }
 
     public List<Group> getAvailableGroups(Subject subject){
         List<Group> available = new ArrayList<>();
-        for (Group el : groupService.getGroups()){
+        for (Group el : groupService.getAll()){
             if (!subject.getGroups().contains(el)){
                 available.add(el);
             }
@@ -67,9 +60,9 @@ public class SubjectService {
 
 
     @Transactional
-    public void addNewGroup(Integer subject_id, Integer group_id){
-        Group group = groupService.findById(group_id);
-        Subject subject = subjectRepository.findById(subject_id).orElse(null);
+    public void addNewGroup(Long subjectId, Long groupId){
+        Group group = groupService.getById(groupId);
+        Subject subject = subjectRepository.findById(subjectId).orElse(null);
         List<Group> groups = subject.getGroups();
         groups.add(group);
         subject.setGroups(groups);
@@ -78,9 +71,9 @@ public class SubjectService {
     }
 
     @Transactional
-    public boolean deleteGroupFromSubject(Integer subject_id, Integer group_id){
-        Subject subject = subjectRepository.findById(subject_id).orElse(null);
-        Group group = groupService.findById(group_id);
+    public boolean deleteGroupFromSubject(Long subjectId, Long groupId){
+        Subject subject = subjectRepository.findById(subjectId).orElse(null);
+        Group group = groupService.getById(groupId);
         if (!subject.getGroups().contains(group))
             return false;
         List<Group> groups = subject.getGroups();
@@ -92,28 +85,40 @@ public class SubjectService {
     }
 
     @Transactional
-    public boolean createNewLabaForSubject(Integer subject_id, Integer labaNum, String title){
+    public boolean createNewLabaForSubject(Long subjectId, Integer labaNum, String title){
 
-        Subject subject = subjectRepository.findById(subject_id).orElse(null);
-        Integer prevQuant = subject.getCountOfLabs();
-        subject.setCountOfLabs(prevQuant+1);
-        subjectRepository.save(subject);
+        Optional<Subject> subjectOptional = subjectRepository.findById(subjectId);
+        if (subjectOptional.isPresent()) {
+            Subject subject = subjectOptional.get();
+            subjectRepository.save(subject);
 
-        Laba laba = new Laba(labaNum, title, subject);
-        if (!validateLaba(laba))
-            return false;
-        labaRepository.save(new Laba(labaNum, title, subject));
-        Laba created = labaRepository.findByNumberAndSubject(labaNum, subject).orElse(null);
-        updateZachetsForLaba(created.getId());
-        return true;
+            Laba laba = Laba.builder()
+                    .subject(subject)
+                    .number(labaNum)
+                    .title(title)
+                    .build();
+            if (!validateLaba(laba))
+                return false;
+            labaRepository.save(laba);
+            Laba created = labaRepository.findByNumberAndSubject(labaNum, subject).orElse(null);
+            updateZachetsForLaba(created.getId());
+            return true;
+        }
+        return false; //TODO
     }
 
     @Transactional
-    public void updateZachetsForLaba(Integer laba_id){
-        Laba laba = labaRepository.findById(laba_id).orElse(null);
+    public void updateZachetsForLaba(Long labaId){
+        Laba laba = labaRepository.findById(labaId).orElse(null);
         for (Group group : laba.getSubject().getGroups()){
             for (Student student : group.getStudents()){
-                zachetRepository.save(new Zachet(student, "-", laba));
+                zachetRepository.save(
+                        Zachet.builder()
+                                .laba(laba)
+                                .value("-")
+                                .student(student)
+                                .build()
+                );
             }
         }
     }
@@ -122,7 +127,13 @@ public class SubjectService {
     public void createZachetsForNewGroup(Subject subject, Group group){
         for (Student student : group.getStudents()){
             for (Laba laba : subject.getLabas()){
-                zachetRepository.save(new Zachet(student, "-", laba));
+                zachetRepository.save(
+                        Zachet.builder()
+                                .laba(laba)
+                                .value("-")
+                                .student(student)
+                                .build()
+                );
             }
         }
     }

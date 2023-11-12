@@ -1,10 +1,11 @@
 package by.gurinovich.ZapolZachetSpring.config;
 
-import by.gurinovich.ZapolZachetSpring.security.UserDetails;
+import by.gurinovich.ZapolZachetSpring.models.User;
 import by.gurinovich.ZapolZachetSpring.services.auth.UserDetailsService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.io.IOException;
 
@@ -26,6 +26,11 @@ import java.io.IOException;
 @EnableWebSecurity
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
+
+    @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
+    }
 
     @Autowired
     public SecurityConfig(UserDetailsService userDetailsService) {
@@ -50,14 +55,12 @@ public class SecurityConfig {
                 .successHandler(new AuthenticationSuccessHandler() {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-                        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                        String role  = userDetails.getUser().getRole();
-                        if (role.equals("ROLE_USER"))
-                            response.sendRedirect("/choosegroup");
-                        else if (role.equals("ROLE_TEACHER"))
-                            response.sendRedirect("/teacher");
-                        else if (role.equals("ROLE_ADMIN"))
-                            response.sendRedirect("/admin/users");
+                        User user = (User) authentication.getPrincipal();
+                        switch (user.getRole()) {
+                            case "ROLE_USER" -> response.sendRedirect("/choosegroup");
+                            case "ROLE_TEACHER" ->  response.sendRedirect("/teacher");
+                            case "ROLE_ADMIN" -> response.sendRedirect("/admin/users");
+                        }
                     }
                 })
                 .failureHandler(new AuthenticationFailureHandler() {

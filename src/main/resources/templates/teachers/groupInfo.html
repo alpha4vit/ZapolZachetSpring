@@ -39,7 +39,7 @@
     <tbody>
     <tr th:each="student : ${students}">
         <th th:text="${student.getFio()}" style = "background-color: #E2EFDA;font-family: Century Gothic, sans-serif;font-size: medium;text-align: left;padding: 0px 20px 0px 0px;width: auto"></th>
-        <td th:each="zachet : ${zachetService.findByStudentAndSubject(student, groupANDsubject.getSubject())}" th:text="${zachet.getValue()}" style = "background-color: #E2EFDA;font-family: Century Gothic, sans-serif;font-size: medium;text-align: left;padding: 0px 20px 0px 0px;width: auto"></td>
+        <td th:each="zachet : ${zachetService.getByStudentAndSubject(student, groupANDsubject.getSubject())}" th:text="${zachet.getValue()}" style = "background-color: #E2EFDA;font-family: Century Gothic, sans-serif;font-size: medium;text-align: left;padding: 0px 20px 0px 0px;width: auto"></td>
     </tr>
 
     </tbody>

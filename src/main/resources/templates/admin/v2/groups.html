@@ -33,12 +33,6 @@
 <div style="margin-bottom: 5vh" class="container">
     <div class="row flex-lg-nowrap">
         <div class="col">
-            <div class="e-tabs mb-3 px-3">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item"><a class="nav-link active" href="#">Студенты</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Предметы</a></li>
-                </ul>
-            </div>
             <div class="row flex-lg-nowrap">
                 <div class="col mb-3">
                     <div class="e-panel card">
@@ -64,7 +58,7 @@
                                             <td class="text-nowrap align-middle"><span>Успеваемость TODO</span></td>
                                             <td class="text-center align-middle">
                                                 <div class="btn-group align-top">
-                                                    <form th:action="@{/admin/groups/{id}(id=${group.getId()})}">
+                                                    <form th:action="@{/admin/groups/{id}/students(id=${group.getId()})}">
                                                         <button class="btn btn-sm btn-outline-secondary badge" type="submit">Информация</button>
                                                     </form>
                                                 </div>

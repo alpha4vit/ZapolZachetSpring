@@ -24,7 +24,7 @@ public class StudentValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         Student student = (Student) target;
-        if (studentService.findByName(student.getFio()) != null)
+        if (studentService.getByName(student.getFio()) != null)
             errors.rejectValue("fio", "", "Студент с таким именем уже существует");
     }
 }

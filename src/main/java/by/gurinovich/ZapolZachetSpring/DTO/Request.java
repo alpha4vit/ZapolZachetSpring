@@ -1,141 +1,39 @@
 package by.gurinovich.ZapolZachetSpring.DTO;
 
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
-@Component
+@Data
 public class Request {
-    private Integer group_id;
-    private Integer subject_id;
-    private Integer laba_id;
+    @JsonProperty(value = "group_id")
+    private Long groupId;
 
+    @JsonProperty(value = "subject_id")
+    private Long subjectId;
+
+    @JsonProperty(value = "laba_id")
+    private Long labaId;
+
+    @JsonProperty(value = "student_id")
+    private Long studentId;
+
+    @JsonProperty(value = "new_zachet_laba_id")
+    private Long newZachetLabaId;
+
+    @JsonProperty(value = "surname_search")
     private String surnameSearch;
+
+    @JsonProperty(value = "laba_num_filter")
     private Integer labaNumFilter;
 
-    private Integer student_id;
-    private Integer newZachetLabaId;
     private String value;
 
-
-    private Integer newQuantOfLabas;
+    @JsonProperty(value = "new_laba_num")
     private Integer newLabaNum;
+
+    @JsonProperty(value = "new_laba_title")
     private String newLabaTitle;
-
-
 
     private String type;
 
-    public Request(Integer group_id, Integer subject_id, Integer labaId, String surnameSearch, Integer labaNumFilter, Integer student_id,
-                   Integer labaNumZachet, String value, Integer newQuantOfLabas, Integer newLabaNum, String newLabaTitle, String type) {
-        this.group_id = group_id;
-        this.subject_id = subject_id;
-        laba_id = labaId;
-        this.surnameSearch = surnameSearch;
-        this.labaNumFilter = labaNumFilter;
-        this.student_id = student_id;
-        this.newZachetLabaId = labaNumZachet;
-        this.value = value;
-        this.newQuantOfLabas = newQuantOfLabas;
-        this.newLabaNum = newLabaNum;
-        this.newLabaTitle = newLabaTitle;
-        this.type = type;
-    }
-
-    public Request() {
-    }
-
-    public Integer getGroup_id() {
-        return group_id;
-    }
-
-    public void setGroup_id(Integer group_id) {
-        this.group_id = group_id;
-    }
-
-    public Integer getSubject_id() {
-        return subject_id;
-    }
-
-    public void setSubject_id(Integer subject_id) {
-        this.subject_id = subject_id;
-    }
-
-    public String getSurnameSearch() {
-        return surnameSearch;
-    }
-
-    public void setSurnameSearch(String surnameSearch) {
-        this.surnameSearch = surnameSearch;
-    }
-
-    public Integer getLabaNumFilter() {
-        return labaNumFilter;
-    }
-
-    public void setLabaNumFilter(Integer labaNumFilter) {
-        this.labaNumFilter = labaNumFilter;
-    }
-
-    public Integer getStudent_id() {
-        return student_id;
-    }
-
-    public void setStudent_id(Integer student_id) {
-        this.student_id = student_id;
-    }
-
-    public Integer getNewZachetLabaId() {
-        return newZachetLabaId;
-    }
-
-    public void setNewZachetLabaId(Integer newZachetLabaId) {
-        this.newZachetLabaId = newZachetLabaId;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public Integer getNewQuantOfLabas() {
-        return newQuantOfLabas;
-    }
-
-    public void setNewQuantOfLabas(Integer newQuantOfLabas) {
-        this.newQuantOfLabas = newQuantOfLabas;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Integer getNewLabaNum() {
-        return newLabaNum;
-    }
-
-    public void setNewLabaNum(Integer newLabaNum) {
-        this.newLabaNum = newLabaNum;
-    }
-
-    public String getNewLabaTitle() {
-        return newLabaTitle;
-    }
-
-    public void setNewLabaTitle(String newLabaTitle) {
-        this.newLabaTitle = newLabaTitle;
-    }
-
-    public Integer getLaba_id() {
-        return laba_id;
-    }
-
-    public void setLaba_id(Integer laba_id) {
-        this.laba_id = laba_id;
-    }
 }

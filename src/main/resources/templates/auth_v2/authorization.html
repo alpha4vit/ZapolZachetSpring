@@ -58,9 +58,9 @@
         <div class="form signup">
             <span class="title">Registration</span>
 
-            <form th:object="${user}" th:method="post" th:action="@{/registration}">
+            <form th:object="${user}" th:method="post" th:action="@{/auth/registration}">
                 <div class="input-field">
-                    <input th:field="*{name}" type="text" placeholder="Введите имя пользователя" required>
+                    <input th:field="*{username}" type="text" placeholder="Введите имя пользователя" required>
                     <i class="uil uil-user"></i>
                 </div>
                 <div class="input-field">

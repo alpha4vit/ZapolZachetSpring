@@ -24,7 +24,7 @@ public class GroupValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         Group group = (Group) target;
-        if (groupService.findByName(group.getName()) != null)
+        if (groupService.getByName(group.getName()) != null)
             errors.rejectValue("name", "", "Group with this name is already exists");
     }
 }

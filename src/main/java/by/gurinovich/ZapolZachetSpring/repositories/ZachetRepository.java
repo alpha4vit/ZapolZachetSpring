@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ZachetRepository extends JpaRepository<Zachet, Integer> {
+public interface ZachetRepository extends JpaRepository<Zachet, Long> {
     List<Zachet> findByStudent(Student student);
 
     Optional<Zachet> findByStudentAndLaba(Student student, Laba laba);

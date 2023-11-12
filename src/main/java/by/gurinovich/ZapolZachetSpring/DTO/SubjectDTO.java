@@ -1,52 +1,14 @@
 package by.gurinovich.ZapolZachetSpring.DTO;
 
-import by.gurinovich.ZapolZachetSpring.models.Subject;
-import by.gurinovich.ZapolZachetSpring.utils.Views;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
-import jakarta.validation.constraints.NotNull;
-
+@Data
 public class SubjectDTO {
-    @JsonView(Views.Public.class)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int id;
 
-    @JsonView(Views.Public.class)
-    @NotNull
+    @NotBlank(message = "Название предмета не должно быть пустым")
     private String title;
-
-    @JsonView(Views.Public.class)
-    @NotNull
-    private Integer quantOfLabs;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Integer getQuantOfLabs() {
-        return quantOfLabs;
-    }
-
-    public void setQuantOfLabs(Integer quantOfLabs) {
-        this.quantOfLabs = quantOfLabs;
-    }
-
-    public static SubjectDTO convertToDTO(Subject subject){
-        SubjectDTO dto = new SubjectDTO();
-        dto.setId(subject.getId());
-        dto.setTitle(subject.getTitle());
-        dto.setQuantOfLabs(subject.getCountOfLabs());
-        return dto;
-    }
 }

@@ -35,8 +35,8 @@
 <div class="col">
 <div class="e-tabs mb-3 px-3">
 <ul class="nav nav-tabs">
-<li class="nav-item"><a class="nav-link active" href="#">Студенты</a></li>
-    <li class="nav-item"><a class="nav-link" href="#">Предметы</a></li>
+<li class="nav-item"><a class="nav-link active" th:href="@{/admin/groups/{group_id}/students(group_id=${group.getId()})}">Студенты</a></li>
+    <li class="nav-item"><a class="nav-link" th:href="@{/admin/groups/{group_id}/subjects(group_id=${group.getId()})}">Предметы</a></li>
 </ul>
 </div>
 <div class="row flex-lg-nowrap">
