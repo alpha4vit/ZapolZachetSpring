@@ -22,6 +22,6 @@ public class GroupDTO {
     @NotEmpty(message = "Name of group cant by Empty")
     private String name;
 
-    private List<SubjectDTO> subjectsDTO;
+    private List<SubjectDTO> subjects;
 
 }

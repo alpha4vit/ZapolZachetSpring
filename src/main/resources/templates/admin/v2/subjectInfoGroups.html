@@ -35,8 +35,8 @@
     <div class="col">
       <div class="e-tabs mb-3 px-3">
         <ul class="nav nav-tabs">
-          <li class="nav-item"><a class="nav-link active" th:href="@{/admin/subjects/{subejct_id}/groups(subject_id=${subject.getId()})}">Группы</a></li>
-          <li class="nav-item"><a class="nav-link" th:href="@{/admin/subjects/{subejct_id}/labas(subject_id=${subject.getId()})}">Лабараторные работы</a></li>
+          <li class="nav-item"><a class="nav-link active" th:href="@{/admin/subjects/{subject_id}/groups(subject_id=${subject.getId()})}">Группы</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/admin/subjects/{subject_id}/labas(subject_id=${subject.getId()})}">Лабараторные работы</a></li>
         </ul>
       </div>
       <div class="row flex-lg-nowrap">
@@ -67,7 +67,7 @@
                           </form>
                         </div>
                         <div class="btn-group align-top">
-                          <form th:method="delete" th:action="@{/subjects/{subject_id}/groups/{group_id}/delete(group_id=${group.getId()}, subject_id=${subject.getId()})}">
+                          <form th:method="delete" th:action="@{/admin/subjects/{subject_id}/groups/{group_id}/delete(group_id=${group.getId()}, subject_id=${subject.getId()})}">
                             <button class="btn btn-sm btn-outline-secondary badge" type="submit"><i class="fa fa-trash"></i></button>
                           </form>
                         </div>
@@ -85,8 +85,8 @@
             <div class="card-body">
               <div class="text-center px-xl-3">
                 <form th:method="post" th:action="@{/admin/subjects/{subject_id}/groups/add(subject_id=${subject.getId()})}">
-                  <select class="newgroup-selector" >
-                    <option name="group_id" id="group_id" th:each="avail : ${availableGroups}" th:value="${avail.getId()}" th:text="${avail.getName()}"></option>
+                  <select name="group_id" class="newgroup-selector" >
+                    <option th:each="avail : ${availableGroups}" th:value="${avail.getId()}" th:text="${avail.getName()}"></option>
                   </select>
                   <button class="btn btn-success btn-block" type="submit" >Добавить группу</button>
                 </form>
@@ -96,6 +96,8 @@
       </div>
     </div>
   </div>
+  </div>
+</div>
   <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.bundle.min.js"></script>
   <script type="text/javascript">

@@ -1,14 +1,13 @@
 package by.gurinovich.ZapolZachetSpring.controllers;
 
+import by.gurinovich.ZapolZachetSpring.DTO.LabaDTO;
 import by.gurinovich.ZapolZachetSpring.DTO.Request;
 import by.gurinovich.ZapolZachetSpring.DTO.StudentDTO;
 import by.gurinovich.ZapolZachetSpring.DTO.SubjectDTO;
-import by.gurinovich.ZapolZachetSpring.models.Group;
-import by.gurinovich.ZapolZachetSpring.models.Student;
-import by.gurinovich.ZapolZachetSpring.models.Subject;
-import by.gurinovich.ZapolZachetSpring.models.User;
+import by.gurinovich.ZapolZachetSpring.models.*;
 import by.gurinovich.ZapolZachetSpring.services.*;
 import by.gurinovich.ZapolZachetSpring.utils.enums.Roles;
+import by.gurinovich.ZapolZachetSpring.utils.mappers.impl.LabaMapper;
 import by.gurinovich.ZapolZachetSpring.utils.mappers.impl.StudentMapper;
 import by.gurinovich.ZapolZachetSpring.utils.mappers.impl.SubjectMapper;
 import by.gurinovich.ZapolZachetSpring.utils.validotors.GroupValidator;
@@ -35,6 +34,7 @@ public class AdminController {
     private final LabaService labaService;
     private final StudentMapper studentMapper;
     private final SubjectMapper subjectMapper;
+    private final LabaMapper labaMapper;
 
     @GetMapping("/groups")
     public String showAdminPage(Model model, @ModelAttribute("group") Group group){
@@ -63,10 +63,27 @@ public class AdminController {
                                     Model model,
                                     @ModelAttribute("newSubject") SubjectDTO subject){
         User user = userService.getAuthenticatedUser();
+        Group group = groupService.getById(id);
         model
-                .addAttribute("group", groupService.getById(id))
-                .addAttribute("current_user", user);
+                .addAttribute("group", group)
+                .addAttribute("current_user", user)
+                .addAttribute("available_subjects", subjectService.getAvailableSubjects(group));
         return "/admin/v2/groupInfoSubjects";
+    }
+
+    @PostMapping("/groups/{group_id}/subjects/add")
+    public String subsribeGroupToSubject(@PathVariable("group_id") Long groupId,
+                                    @RequestParam("subject_id") Long subjectId,
+                                         Model model){
+        subjectService.addNewGroup(subjectId, groupId);
+        return String.format("redirect:/admin/groups/%d/subjects", groupId);
+    }
+
+    @DeleteMapping("/groups/{group_id}/subjects/{subject_id}/delete")
+    public String deleteSubjectFromGroup(@PathVariable("group_id") Long groupId,
+                                         @PathVariable("subject_id") Long subjectId){
+        subjectService.deleteGroupFromSubject(subjectId, groupId);
+        return String.format("redirect:/admin/groups/%d/subjects", groupId);
     }
 
     @GetMapping("/groups/{id}/edit")
@@ -99,8 +116,10 @@ public class AdminController {
                                             Model model,
                                             @ModelAttribute("newStudent") StudentDTO student){
         User user = userService.getAuthenticatedUser();
-        model.addAttribute("group", groupService.getById(id))
-                .addAttribute("current_user", user);
+        Group group = groupService.getById(id);
+        model.addAttribute("group", group)
+                .addAttribute("current_user", user)
+                .addAttribute("students", studentMapper.toDTOs(group.getStudents()));
         return "/admin/v2/groupInfoStudents";
     }
 
@@ -115,7 +134,7 @@ public class AdminController {
     public String editStudentPage(@PathVariable("group_id") int groupId, @PathVariable("student_id") Long studentId, Model model){
         User user = userService.getAuthenticatedUser();
         model.addAttribute("group_id", groupId)
-                .addAttribute("student", studentService.getById(studentId))
+                .addAttribute("student", studentMapper.toDTO(studentService.getById(studentId)))
                 .addAttribute("student_id", studentId)
                 .addAttribute("current_user", user);
         return "admin/v2/studentEditPage";
@@ -165,24 +184,16 @@ public class AdminController {
     }
 
 
-    @GetMapping("/users/{id}")
-    public String showUserInfo(@PathVariable("id") Long id, Model model){
-        User user = userService.getAuthenticatedUser();
-        model.addAttribute("user", userService.getById(id))
-                .addAttribute("roles", Roles.values())
-                .addAttribute("current_user", user);
-        return "admin/userInfoPage";
-    }
-
-
     @PatchMapping("/users/{id}/role")
     public String selectUserRole(@PathVariable("id") Long id,
                                  @ModelAttribute("userForEdit") User user,
-                                 @ModelAttribute("search") String search,
+                                 @RequestParam("search") String search,
                                  Model model){
+        System.out.println(user);
         userService.update(user, id);
         model.addAttribute("users", userService.getByNameStartingWith(search))
-                .addAttribute("roles", Roles.values());
+                .addAttribute("roles", Roles.values())
+                .addAttribute("search", search);
         return "admin/v2/usersPage";
     }
 
@@ -211,78 +222,88 @@ public class AdminController {
         return "redirect:/admin/subjects";
     }
 
-    @GetMapping("/subjects/{id}/edit") //TODO
-    public String editSubjectPage(@PathVariable("id") Long id,
+    @GetMapping("/subjects/{subject_id}/edit")
+    public String editSubjectPage(@PathVariable("subject_id") Long subjectId,
                               Model model) {
-        model.addAttribute("subject", subjectService.getById(id));
-        return "redirect:/admin/subjects";
+        model.addAttribute("subject", subjectMapper.toDTO(subjectService.getById(subjectId)));
+        return "admin/v2/subjectEditPage";
     }
 
-    @PatchMapping("/subjects/{id}/edit") //TODO
-    public String editSubject(@PathVariable("id") Long id,
-                              @ModelAttribute("subject_id") SubjectDTO subject) {
+    @PatchMapping("/subjects/{subject_id}/edit")
+    public String editSubject(@PathVariable("subject_id") Long subjectId,
+                              @ModelAttribute("subject") SubjectDTO subjectDTO) {
+        Subject subject = subjectMapper.fromDTO(subjectDTO);
+        subject.setId(subjectId);
+        subjectService.save(subject);
         return "redirect:/admin/subjects";
     }
 
     @GetMapping("/subjects/{subject_id}/groups")
-    public String getSubjectGroupsInfo(Model model, @PathVariable("subject_id") Long subjectId,
-                                 @ModelAttribute("tempSubject") Subject subject){
+    public String getSubjectGroupsInfo(Model model, @PathVariable("subject_id") Long subjectId){
         Subject current = subjectService.getById(subjectId);
-        model.addAttribute("subject", subjectService.getById(subjectId))
+        model.addAttribute("subject", current)
                 .addAttribute("availableGroups", subjectService.getAvailableGroups(current));
         return "admin/v2/subjectInfoGroups";
     }
 
     @GetMapping("/subjects/{subject_id}/labas")
     public String getSubjectLabasInfo(Model model, @PathVariable("subject_id") Long subjectId,
-                                 @ModelAttribute("tempSubject") Subject subject){
-        model.addAttribute("subject", subjectService.getById(subjectId)) ;
+                                 @ModelAttribute("newLaba") LabaDTO laba){
+        model.addAttribute("subject", subjectService.getById(subjectId));
         return "admin/v2/subjectInfoLabas";
     }
 
 
-    @Deprecated
-    @PostMapping("/subjects/{subject_id}/selectType")
-    public String selectTypeOfPage(Model model, @RequestBody Request request, @PathVariable("subject_id") Long subjectId){
-        Subject subject = subjectService.getById(subjectId);
-        model
-                .addAttribute("subject", subject);
-        if (request.getType().equals("groups")) {
-            model
-                    .addAttribute("groups", subject.getGroups())
-                    .addAttribute("availableGroups", subjectService.getAvailableGroups(subject));
-            return "admin/subjectsGroups";
-        }
-        else {
 
-            return "admin/subjectsLabas";
-        }
-    }
-
-    @ResponseBody
     @PostMapping("/subjects/{subject_id}/groups/add")
-    @ResponseStatus(HttpStatus.OK)
-    public void addGroupToSubject(@PathVariable("subject_id") Long subjectId,
+    public String addGroupToSubject(@PathVariable("subject_id") Long subjectId,
                                                     @RequestParam("group_id") Long groupId){
         subjectService.addNewGroup(subjectId, groupId);
+        return String.format("redirect:/admin/subjects/%d/groups", subjectId);
     }
 
     @DeleteMapping("/subjects/{subject_id}/groups/{group_id}/delete")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteGroupFromSubject(@PathVariable("subject_id") Long subjectId,
+    public String deleteGroupFromSubject(@PathVariable("subject_id") Long subjectId,
                                                          @PathVariable("group_id") Long groupId){
         subjectService.deleteGroupFromSubject(subjectId, groupId);
+        return String.format("redirect:/admin/subjects/%d/groups", subjectId);
     }
 
-    @PostMapping("/subjects/{subject_id}/labas/delete")
-    public String deleteLabaForSubject(@RequestBody Request request,
-                                       Model model,
-                                       @PathVariable("subject_id") Long subject_id){
-        labaService.deleteById(request.getLabaId());
-        model.addAttribute("subject", subjectService.getById(subject_id));
-        return "admin/subjectsLabas";
+    @DeleteMapping("/subjects/{subject_id}/labas/{laba_id}/delete")
+    public String deleteLabaForSubject(@PathVariable("subject_id") Long subjectId,
+                                       @PathVariable("laba_id") Long labaId){
+        labaService.deleteById(labaId);
+        return String.format("redirect:/admin/subjects/%d/labas", subjectId);
     }
 
+    @PostMapping("/subjects/{subject_id}/labas/add")
+    public String deleteLabaForSubject(@PathVariable("subject_id") Long subjectId,
+                                       @ModelAttribute("newLaba") LabaDTO labaDTO){
+        Laba laba = labaMapper.fromDTO(labaDTO);
+        laba.setSubject(subjectService.getById(subjectId));
+        labaService.save(laba);
+        return String.format("redirect:/admin/subjects/%d/labas", subjectId);
+    }
+
+    @GetMapping("/subjects/{subject_id}/labas/{laba_id}/edit")
+    public String editLabaPage(@PathVariable("subject_id") Long subjectId,
+                           @PathVariable("laba_id") Long labaId,
+                           Model model){
+        model.addAttribute("laba", labaMapper.toDTO(labaService.getById(labaId)))
+                .addAttribute("subject_id", subjectId);
+        return "admin/v2/labaEditPage";
+    }
+
+    @PatchMapping("/subjects/{subject_id}/labas/{laba_id}/edit")
+    public String editLaba(@PathVariable("subject_id") Long subjectId,
+                           @PathVariable("laba_id") Long labaId,
+                           @ModelAttribute("laba") LabaDTO labaDTO){
+        Laba laba = labaMapper.fromDTO(labaDTO);
+        laba.setId(labaId);
+        laba.setSubject(subjectService.getById(subjectId));
+        labaService.save(laba);
+        return String.format("redirect:/admin/subjects/%d/labas", subjectId);
+    }
 
 }
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -149,4 +150,8 @@ public class SubjectService {
         }
     }
 
+    public List<Subject> getAvailableSubjects(Group group) {
+        HashSet<Subject> groupSubjects = new HashSet<>(group.getSubjects());
+        return getAll().stream().filter(el -> !groupSubjects.contains(el)).toList();
+    }
 }

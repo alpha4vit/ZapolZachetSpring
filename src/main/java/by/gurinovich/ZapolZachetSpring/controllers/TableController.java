@@ -27,10 +27,11 @@ public class TableController {
 
 
     @GetMapping("/choosegroup")
-    public String chooseGroup(Model model){
+    public String chooseGroup(Model model, @ModelAttribute("groupANDsubject") GroupAndSubject groupAndSubject){
         User user = userService.getAuthenticatedUser();
-        model.addAttribute("current_user", user);
-        return "users/choosePage";
+        model.addAttribute("current_user", user)
+                .addAttribute("groups", groupService.getAll());
+        return "users/v2/choosePage";
     }
 
     @PostMapping("/choosegroup")
@@ -42,7 +43,7 @@ public class TableController {
                 .addAttribute("zachetService", zachetService)
                 .addAttribute("current_user", user)
                 .addAttribute("groupANDsubject", new GroupAndSubject(group, subject));
-        return "users/table";
+        return "users/v2/table";
     }
 
 

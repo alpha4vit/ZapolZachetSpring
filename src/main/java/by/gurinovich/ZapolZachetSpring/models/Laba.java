@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "labas")
 @Data
@@ -29,4 +31,16 @@ public class Laba {
     @JoinColumn(name = "subject_id", referencedColumnName = "id")
     private Subject subject;
 
+    @OneToMany(mappedBy = "laba")
+    private List<Zachet> zachets;
+
+    @Override
+    public String toString() {
+        return "Laba{" +
+                "id=" + id +
+                ", number=" + number +
+                ", title='" + title + '\'' +
+                ", subject=" + subject +
+                '}';
+    }
 }

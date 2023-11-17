@@ -177,10 +177,13 @@ function createRoleChooseForm(){
 // </tr>
 // </tbody>
 
-function submitOnchange() {
-    document.getElementById("form-submit-onchange").submit();
+function submitOnchange(select) {
+    var parentForm = select.closest('.dynamic-form');
+    if (parentForm) {
+        console.log('Submitting form:', parentForm);
+        parentForm.submit();
+    }
 }
-
 function submitOnEnter(){
     if (event.key === 'Enter') {
         document.getElementById("form-submit-onenter").submit();

@@ -41,8 +41,6 @@
 <!--                <i class="fa fa-coffee"></i>-->
 <!--                This is an <strong>.alert</strong>. Use this to show important messages to the user.-->
 <!--            </div>-->
-            <h3>Personal info</h3>
-
             <form th:method="patch" th:action="@{/admin/groups/{group_id}/students/{student_id}/edit(group_id=${group_id}, student_id=${student_id})}" th:object="${student}" class="form-horizontal" role="form">
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Ф.И.О.</label>
@@ -54,9 +52,9 @@
                 <div class="form-group">
                     <label class="col-lg-3 control-label">Дата рождения:</label>
                     <div class="col-lg-8">
-                        <input class="form-control" type="text" placeholder="25/05/2002">
+                        <input th:field="*{dateOfBirth}" class="form-control" type="text" placeholder="25/05/2002">
                     </div>
-                    <div style="color: darkred" th:if="${#fields.hasErrors('fio')}" th:errors="*{fio}"></div>
+                    <div style="color: darkred" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}"></div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label"></label>

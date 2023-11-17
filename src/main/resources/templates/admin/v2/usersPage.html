@@ -57,9 +57,10 @@
                                             <td th:text="${user.getEmail()}" class="text-nowrap align-middle"><span>Почта</span></td>
                                             <td th:text="${user.getRole()}" class="text-nowrap align-middle"><span>Роль</span></td>
                                             <td class="text-center align-middle">
-                                                <form id="form-submit-onchange" th:method="patch" th:object="${userForEdit}" th:action="@{/admin/users/{id}/role(id=${user.getId()})}">
-                                                    <select onchange="submitOnchange()" th:field="${userForEdit.role}">
-                                                        <option th:selected="${role == user.getRole()}" th:value="${role}" th:each="role : ${roles}" th:text="${role}"></option>
+                                                <form class="dynamic-form" id="form-submit-onchange" th:method="patch" th:object="${userForEdit}" th:action="@{/admin/users/{id}/role(id=${user.getId()})}">
+                                                    <input th:name="search" type="hidden" th:value="${search}"/>
+                                                    <select onchange="submitOnchange(this)" th:field="${userForEdit.role}">
+                                                        <option th:value="${role}" th:each="role : ${roles}" th:text="${role}"></option>
                                                     </select>
                                                 </form>
 <!--                                                <div class="btn-group align-top">-->
@@ -81,10 +82,10 @@
                         <div class="card-body">
                             <div>
                                 <div class="form-group">
-                                    <form onsubmit="updateUsersBySearch()" id="form-search-users">
+                                    <form method="post" th:action="@{/admin/users}" id="form-search-users">
                                         <label>Поиск по имени: </label>
-                                        <input th:value="${search}" class="form-control w-100" type="text" name="search" id="search"/>
-                                        <button type="submit"></button>
+                                        <input th:value="${search}" class="form-control w-100" type="text" name="search"/>
+                                        <button type="submit">Найти</button>
                                     </form>
                                 </div>
                             </div>

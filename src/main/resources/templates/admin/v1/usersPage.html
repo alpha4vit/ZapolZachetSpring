@@ -33,7 +33,7 @@
 
 
 <ul class="link-ul" th:each="user : ${users}">
-    <li class="link-list"> <a th:text="${user.getId()+', '+user.getName()}" th:href="@{/admin/users/{id}(id=${user.getId()})}"></a></li>
+    <li class="link-list"> <a th:text="${user.getId()+', '+user.getUsername()}" th:href="@{/admin/users/{id}(id=${user.getId()})}"></a></li>
 </ul>
 
 </body>

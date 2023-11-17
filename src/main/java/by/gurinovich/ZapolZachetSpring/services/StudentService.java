@@ -19,7 +19,7 @@ import java.util.List;
 public class StudentService {
     private final StudentRepository studentRepository;
     private final GroupService groupService;
-    private final ZachetRepository zachetRepository;
+    private final ZachetService zachetService;
 
     public List<Student> getAll(){
         return studentRepository.findAll();
@@ -60,17 +60,8 @@ public class StudentService {
 
     @Transactional
     public void updateZachetsForNewStudent(Long groupId, Student student){
-        List<Subject> subjects = groupService.getById(groupId).getSubjects();
-        for (Subject subject : subjects){
-            for (Laba laba : subject.getLabas()){
-                zachetRepository.save(
-                        Zachet.builder()
-                                .student(student)
-                                .value("-")
-                                .laba(laba)
-                                .build()
-                );
-            }
-        }
+        groupService.getById(groupId).getSubjects().forEach(subject ->
+                subject.getLabas().forEach(laba ->
+                        zachetService.addZachetToStudent(student, laba)));
     }
 }

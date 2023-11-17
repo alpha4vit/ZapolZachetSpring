@@ -28,14 +28,13 @@
         <a class="a_header" href="/login">Войти</a>
     </div>
 </header>
-<form class="form-select">
-    <select name=groupSelect" id=groupSelect" class="group-select" onclick="updateSubjectSelect()">
-        <option v-for="group in groups":value="group.id">{{group.name}}</option>
-    </select>
-    <select name="subjectSelect" id="subjectSelect" class="subject-select">
+<select  name=groupSelect" id=groupSelect" class="group-select" onclick="updateSubjectSelect()">
+    <option th:each="group :${groups}" th:text="${group.getName()}" th:value="${group.getId()}"></option>
+</select>
+<select name="subjectSelect" id="subjectSelect" class="subject-select">
 
-    </select>
-    <input onclick="selection('teacher')" type="button" value="Выбрать!"/>
+</select>
+<input onclick="selection('user')" type="button" value="Выбрать!"/>
 </form>
 <div id="table" class="table"></div>
 <script src="/js/allForTables.js"></script>

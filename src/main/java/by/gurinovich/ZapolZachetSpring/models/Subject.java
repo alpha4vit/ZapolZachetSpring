@@ -28,4 +28,11 @@ public class Subject {
     @OneToMany(mappedBy = "subject")
     private List<Laba> labas;
 
+    @Override
+    public String toString() {
+        return "Subject{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

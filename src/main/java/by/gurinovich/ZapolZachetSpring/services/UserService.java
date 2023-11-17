@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -20,7 +21,7 @@ public class UserService {
 
     public User getAuthenticatedUser(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal != null) {
+        if (principal != null && !(principal instanceof String)) {
             User user = (User) principal;
             return userRepository.findById(user.getId()).orElse(null);
         }
@@ -36,7 +37,8 @@ public class UserService {
     }
 
     public List<User> getAll(){
-        return userRepository.findAll();
+        return userRepository.findAll()
+                .stream().sorted(Comparator.comparing(User::getUsername)).toList();
     }
 
     public User getById(Long id){
@@ -44,7 +46,8 @@ public class UserService {
     }
 
     public List<User> getByNameStartingWith(String name){
-        return userRepository.findByUsernameStartingWith(name);
+        return userRepository.findByUsernameStartingWith(name)
+                .stream().sorted(Comparator.comparing(User::getUsername)).toList();
     }
 
     @Transactional

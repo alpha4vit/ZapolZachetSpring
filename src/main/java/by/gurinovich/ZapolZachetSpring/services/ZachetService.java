@@ -1,6 +1,8 @@
 package by.gurinovich.ZapolZachetSpring.services;
 
 import by.gurinovich.ZapolZachetSpring.models.*;
+import by.gurinovich.ZapolZachetSpring.repositories.LabaRepository;
+import by.gurinovich.ZapolZachetSpring.repositories.StudentRepository;
 import by.gurinovich.ZapolZachetSpring.repositories.ZachetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ZachetService {
     private final ZachetRepository zachetRepository;
-    private final StudentService studentService;
-    private final LabaService labaService;
+    private final StudentRepository studentRepository;
+    private final LabaRepository labaRepository;
 
     @Transactional
     public void save(Zachet zachet){
@@ -38,13 +40,22 @@ public class ZachetService {
 
     @Transactional
     public void update(Zachet zachet){
-        Optional<Zachet> temp = zachetRepository.findByStudentAndLaba(studentService.getById(zachet.getStudent().getId()),
-                labaService.getById(zachet.getLaba().getId()));
+        Optional<Zachet> temp = zachetRepository.findByStudentAndLaba(studentRepository.findById(zachet.getStudent().getId()).orElse(null),
+                labaRepository.findById(zachet.getLaba().getId()).orElse(null));
         if (temp.isPresent()){
             zachet.setId(temp.get().getId());
             zachetRepository.save(zachet);
         }
         zachetRepository.save(zachet);
+    }
+
+    @Transactional
+    public void addZachetToStudent(Student student, Laba laba){
+        save(Zachet.builder()
+                        .student(student)
+                        .value("-")
+                        .laba(laba)
+                .build());
     }
 
     @Transactional

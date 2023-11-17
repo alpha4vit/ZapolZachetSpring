@@ -31,8 +31,8 @@ function selection(type){
     var data = JSON.stringify({
         group_id:group_id,
         subject_id:subject_id,
-        surnameSearch:surnameSearch,
-        labaNumFilter:labaNumFilter
+        surname_search:surnameSearch,
+        laba_num_filter:labaNumFilter
     });
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -77,17 +77,8 @@ function addNewZachet(){
     xhr.send(data);
 }
 
-
-var app = new Vue({
-    el: '.form-select',
-    data: {
-        groups: groupList
-    },
-});
-
-
 var prevValue = -1;
-var updateSubjectSelect = function (){
+function updateSubjectSelect(type){
     var groupSelect = document.querySelector(".group-select");
     var value = groupSelect.value;
     if (prevValue !== value) {
@@ -100,7 +91,7 @@ var updateSubjectSelect = function (){
             .then(groups => {
                 groups.forEach(group => {
                     if (group.id == value) {
-                        group.subjectsDTO.forEach(subject => {
+                        group.subjects.forEach(subject => {
                             var option = document.createElement("option");
                             option.value = subject.id;
                             option.textContent = subject.title;
@@ -111,6 +102,47 @@ var updateSubjectSelect = function (){
             })
             .catch(error => console.log(error));
     }
+    if (type === 'teacher') {
+        updateStudentSelectZachetForm();
+    }
+}
+
+function updateStudentSelectZachetForm(){
+    var group_id = document.querySelector(".group-select").value;
+    var studentSelect = document.querySelector(".student-select")
+    while(studentSelect.firstChild){
+        studentSelect.removeChild(studentSelect.firstChild)
+    }
+    fetch(path+'/api/students/'+group_id).then(res => res.json())
+        .then(students => {
+            students.forEach(student => {
+                var option = document.createElement("option");
+                option.setAttribute("value", student.id);
+                option.textContent = student.fio;
+                studentSelect.appendChild(option);
+            })
+        })
+        .catch(error => console.log(error));
+    updateLabaSelectZachetForm();
+}
+
+function updateLabaSelectZachetForm(){
+    var subject_id = document.querySelector(".subject-select").value;
+    var student_id = document.querySelector(".student-select").value;
+    var labaSelect = document.querySelector(".laba-select");
+    while(labaSelect.firstChild){
+        labaSelect.removeChild(labaSelect.firstChild)
+    }
+    fetch(path+'/api/subjects/'+subject_id+"/labas/"+student_id).then(res => res.json())
+        .then(labas => {
+            labas.forEach(laba => {
+                var option = document.createElement("option");
+                option.setAttribute("th:value", laba.id);
+                option.textContent = laba.number+") "+laba.title;
+                labaSelect.appendChild(option);
+            })
+        })
+        .catch(error => console.log(error));
 }
 
 

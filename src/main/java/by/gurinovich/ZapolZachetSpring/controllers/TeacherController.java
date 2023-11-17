@@ -4,10 +4,7 @@ import by.gurinovich.ZapolZachetSpring.DTO.GroupAndSubject;
 import by.gurinovich.ZapolZachetSpring.DTO.Request;
 import by.gurinovich.ZapolZachetSpring.models.*;
 import by.gurinovich.ZapolZachetSpring.services.*;
-import by.gurinovich.ZapolZachetSpring.utils.validotors.ZachetValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,27 +25,27 @@ public class TeacherController {
 
 
     @GetMapping()
-    public String chooseGroupPage(Model model, @ModelAttribute("groupANDsubject") GroupAndSubject groupAndSubject) {
+    public String chooseGroupPage(Model model,
+                                  @ModelAttribute("groupANDsubject") GroupAndSubject groupAndSubject,
+                                  @ModelAttribute("zachetModel") ZachetModel zachetModel,
+                                  @ModelAttribute("request") Request request) {
         User user = userService.getAuthenticatedUser();
-        model.addAttribute("user", user);
-        return "teachers/choosePage";
+        model.addAttribute("user", user)
+                .addAttribute("groups", groupService.getAll())
+                .addAttribute("current_user", user);
+        return "teachers/v2/choosePage";
     }
 
-    @GetMapping("/group")
-    public String showGroup(@ModelAttribute("groupANDsubject") GroupAndSubject groupAndSubject, Model model){
-        Group group = groupService.getById(groupAndSubject.getGroup().getId());
-        Subject subject = subjectService.getById(groupAndSubject.getSubject().getId());
-        User user = userService.getAuthenticatedUser();
-        model.addAttribute("group", group)
-                .addAttribute("subject", subject)
-                .addAttribute("students", group.getStudents())
-                .addAttribute("groups", groupService.getAll())
-                .addAttribute("subjects", subjectService.getAll())
-                .addAttribute("zachetModel", new ZachetModel())
-                .addAttribute("zachetService", zachetService)
-                .addAttribute("current_user", user);
-        return "teachers/groupInfo";
-    }
+//    @GetMapping("/group")
+//    public String showGroup(@ModelAttribute("groupANDsubject") GroupAndSubject groupAndSubject, Model model){
+//        User user = userService.getAuthenticatedUser();
+//        model.addAttribute("groups", groupService.getAll())
+//                .addAttribute("subjects", subjectService.getAll())
+//                .addAttribute("zachetModel", new ZachetModel())
+//                .addAttribute("zachetService", zachetService)
+//                .addAttribute("current_user", user);
+//        return "teachers/groupInfo";
+//    }
 
     @PostMapping("/group/zachets/new")
     public String newZachet(@RequestBody Request request, BindingResult bindingResult, Model model){
@@ -68,7 +65,7 @@ public class TeacherController {
                 .addAttribute("zachetService", zachetService)
                 .addAttribute("request", request)
                 .addAttribute("zachetModel", new ZachetModel(student));
-        return "users/table";
+        return "users/v2/table";
     }
 
     @PostMapping("group/select")
@@ -83,10 +80,7 @@ public class TeacherController {
                 .addAttribute("zachetService", zachetService)
                 .addAttribute("zachetModel", new ZachetModel())
                 .addAttribute("request", request);
-        if (request.getLabaNumFilter() != null || request.getSurnameSearch() != null){
-            return "users/table";
-        }
-        return "teachers/groupInfo";
+        return "users/v2/table";
     }
 
 }

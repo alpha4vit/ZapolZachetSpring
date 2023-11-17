@@ -1,8 +1,10 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   datasource:
-    url: jdbc:postgresql://localhost:5432/zapolzachet
-    password: root
-    username: postgres
+    url: jdbc:postgresql://${HOST}:5432/${POSTGRES_DATABASE}?currentSchema=${POSTGRES_SCHEMA}
+    password: ${POSTGRES_PASSWORD}
+    username: ${POSTGRES_USERNAME}
     driverClassName: org.postgresql.Driver
   jpa:
     properties:
