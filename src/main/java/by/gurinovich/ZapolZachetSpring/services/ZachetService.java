@@ -51,11 +51,13 @@ public class ZachetService {
 
     @Transactional
     public void addZachetToStudent(Student student, Laba laba){
-        save(Zachet.builder()
-                        .student(student)
-                        .value("-")
-                        .laba(laba)
-                .build());
+        if (zachetRepository.findByStudentAndLaba(student, laba).isEmpty()) {
+            save(Zachet.builder()
+                    .student(student)
+                    .value("-")
+                    .laba(laba)
+                    .build());
+        }
     }
 
     @Transactional

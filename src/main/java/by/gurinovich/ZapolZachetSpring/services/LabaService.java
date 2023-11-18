@@ -3,6 +3,7 @@ package by.gurinovich.ZapolZachetSpring.services;
 import by.gurinovich.ZapolZachetSpring.models.Laba;
 import by.gurinovich.ZapolZachetSpring.models.Student;
 import by.gurinovich.ZapolZachetSpring.models.Subject;
+import by.gurinovich.ZapolZachetSpring.models.Zachet;
 import by.gurinovich.ZapolZachetSpring.repositories.LabaRepository;
 import by.gurinovich.ZapolZachetSpring.repositories.ZachetRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +32,14 @@ public class LabaService {
     }
 
     public List<Laba> getAllUndoneByStudentAndSubject(Student student, Subject subject){
-        List<Laba> result = new ArrayList<>();
-        student.getZachety().forEach(el -> result.addAll(labaRepository.findAllBySubjectAndZachetsNotContaining(subject, el)));
-        result.forEach(System.out::println);
-        return result;
+        return student.getZachety()
+                .stream()
+                .filter(zachet -> zachet.getValue().equals("-") && zachet.getLaba().getSubject().equals(subject))
+                .map(Zachet::getLaba).toList();
+    }
+
+    public List<Laba> getAll(){
+        return labaRepository.findAll();
     }
 
     @Transactional
