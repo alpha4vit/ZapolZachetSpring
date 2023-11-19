@@ -2,7 +2,7 @@ spring:
   config:
     import: optional:file:.env[.properties]
   datasource:
-    url: jdbc:postgresql://${HOST}:5432/${POSTGRES_DATABASE}?currentSchema=${POSTGRES_SCHEMA}
+    url: jdbc:postgresql://${HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?currentSchema=${POSTGRES_SCHEMA}
     password: ${POSTGRES_PASSWORD}
     username: ${POSTGRES_USERNAME}
     driverClassName: org.postgresql.Driver
@@ -22,3 +22,14 @@ spring:
   resources:
     add-mappings: true
     static-locations: classpath:/static/
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: romatempforjet@gmail.com
+    password: ydkl aobk ctcc jloj
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

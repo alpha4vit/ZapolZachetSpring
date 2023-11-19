@@ -20,12 +20,13 @@ public class StudentDTO {
     @Size(min = 2, max = 50, message = "ФИО должно быть от 2 до 50 символов")
     private String fio;
 
-    private GroupDTO group;
-
     @JsonProperty(value = "date_of_birth")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private String dateOfBirth;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Double performance;
 
     private List<ZachetDTO> zachety;
 }

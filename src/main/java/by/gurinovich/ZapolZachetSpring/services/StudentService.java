@@ -1,16 +1,12 @@
 package by.gurinovich.ZapolZachetSpring.services;
 
-import by.gurinovich.ZapolZachetSpring.models.Laba;
 import by.gurinovich.ZapolZachetSpring.models.Student;
-import by.gurinovich.ZapolZachetSpring.models.Subject;
-import by.gurinovich.ZapolZachetSpring.models.Zachet;
 import by.gurinovich.ZapolZachetSpring.repositories.StudentRepository;
-import by.gurinovich.ZapolZachetSpring.repositories.ZachetRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -22,7 +18,7 @@ public class StudentService {
     private final ZachetService zachetService;
 
     public List<Student> getAll(){
-        return studentRepository.findAll();
+        return studentRepository.findAll().stream().sorted(Comparator.comparing(Student::getFio)).toList();
     }
 
     public Student getById(Long id){
@@ -41,6 +37,7 @@ public class StudentService {
     @Transactional
     public void save(Student student, Long groupId){
         student.setGroup(groupService.getById(groupId));
+        student.setPerformance(0.0);
         studentRepository.save(student);
         updateZachetsForNewStudent(groupId, student);
     }
@@ -48,7 +45,9 @@ public class StudentService {
 
     @Transactional
     public void update(Student student, Long studentId, Long groupId){
+        Student before = getById(studentId);
         student.setId(studentId);
+        student.setPerformance(before.getPerformance());
         student.setGroup(groupService.getById(groupId));
         studentRepository.save(student);
     }
@@ -63,5 +62,13 @@ public class StudentService {
         groupService.getById(groupId).getSubjects().forEach(subject ->
                 subject.getLabas().forEach(laba ->
                         zachetService.addZachetToStudent(student, laba)));
+    }
+
+    @Transactional
+    public void updatePerfomance(Student student){
+        Long count = student.getZachety().stream().filter(zachet -> zachet.getValue().equals("+")).count();
+        student.setPerformance(count/(double)student.getZachety().size());
+        studentRepository.save(student);
+        groupService.updateAveragePerfomance(student.getGroup());
     }
 }

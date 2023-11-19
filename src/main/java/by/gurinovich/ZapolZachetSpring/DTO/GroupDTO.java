@@ -22,6 +22,11 @@ public class GroupDTO {
     @NotEmpty(message = "Name of group cant by Empty")
     private String name;
 
+    @JsonProperty(value = "average_performance", access = JsonProperty.Access.READ_ONLY)
+    private Double averagePerformance;
+
     private List<SubjectDTO> subjects;
+
+    private List<StudentDTO> students;
 
 }

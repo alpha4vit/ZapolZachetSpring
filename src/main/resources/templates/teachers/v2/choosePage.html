@@ -14,7 +14,7 @@
     }
   </style>
 </head>
-<body onload="updateSubjectSelect('teacher')">
+<body onload="updateSubjectSelect()">
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
   <div  class="container-fluid">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,14 +22,13 @@
     </button>
     <div class="collapse navbar-collapse" id="ftco-nav">
       <ul class="navbar-nav m-auto">
-        <li class="nav-item active"><a th:href="@{/teacher}" class="nav-link">Просмотр ведомости</a></li>
-        <li class="nav-item active"><a th:href="@{/teacher/group}" class="nav-link">Заполнение ведомости</a></li>
+        <li class="nav-item active"><a th:href="@{/teacher}" class="nav-link">Заполнение ведомости</a></li>
         <li th:if="${current_user == null}" class="nav-item"><a href="/auth" class="nav-link">Войти</a></li>
         <li th:if="${current_user != null}" class="nav-item"><a th:href="@{/logout}" class="nav-link">Выйти</a></li>
       </ul>
     </div>
   </div>
-</nav >
+</nav>
 
 <div style="margin-bottom: 5vh" class="container">
   <div class="row flex-lg-nowrap">
@@ -57,22 +56,23 @@
                   <select name=groupSelect" id=groupSelect" class="group-select" onclick="updateSubjectSelect('teacher')">
                     <option th:each="group :${groups}" th:text="${group.getName()}" th:value="${group.getId()}"></option>
                   </select>
-                  <select name="subjectSelect" id="subjectSelect" class="subject-select">
+                  <select onchange="updateTeacherPage()" name="subjectSelect" id="subjectSelect" class="subject-select">
                   </select>
                   <input onclick="selection('user')" type="button" value="Выбрать!"/>
                 </form>
               </div>
+              <hr class="my-3">
               <div>
                 <form th:method="post" th:action="@{/teacher/group/select}">
-                  <label for="surnameFilter">Введите фамилию</label>
-                  <input th:value="${request.getSurnameSearch()}" type="text" id="surnameFilter"/>
+                  <input placeholder="Фамилия студента" th:value="${request.getSurnameSearch()}" type="text" id="surnameFilter"/>
                   <br/>
-                  <input th:value="${request.getLabaNumFilter()}" type="text" id="labaNumFilter"/>
+                  <input placeholder="Номер Л.Р." th:value="${request.getLabaNumFilter()}" type="text" id="labaNumFilter"/>
                   <input onclick="selection('teacher-filter')" type="button" th:value="Отфильтровать"/>
                 </form>
               </div>
+              <hr class="my-3">
               <div>
-                <form  th:object="${zachetModel}" th:action="@{/teacher/group/newZachet}" th:method="post">
+                <form  th:object="${zachetModel}" th:action="@{/teacher/zachets/new}" th:method="post">
                   <select onchange="updateLabaSelectZachetForm()" class="student-select">
 
                   </select>
@@ -81,10 +81,15 @@
 
                   </select>
                   <br/>
-                  <label for="valueZachet">Введите оценку (+ / -)</label>
-                  <input id="valueZachet" type="text"/>
+                  <input placeholder="Оценка +/-" id="valueZachet" type="text"/>
                   <br/>
                   <input onclick="addNewZachet()" type="button" value="Сохранить!"/>
+                </form>
+              </div>
+              <hr class="my-3">
+              <div>
+                <form>
+                  <input onclick="sendExcelToEmail()" type="button" value="Отправить на почту!"/>
                 </form>
               </div>
             </div>

@@ -19,8 +19,10 @@ public class Group {
     private Long id;
 
     @Column(name = "name")
-
     private String name;
+
+    @Column(name = "average_performance")
+    private Double averagePerformance;
 
     @OneToMany(mappedBy = "group")
     private List<Student> students;

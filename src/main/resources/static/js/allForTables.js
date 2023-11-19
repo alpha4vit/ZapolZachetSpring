@@ -38,24 +38,33 @@ function selection(type){
         if (xhr.readyState === 4 && xhr.status === 200) {
             if (type === 'teacher-filter'){
                 document.querySelector('.data').innerHTML = xhr.responseText;
+                updateTeacherPage();
             }
-            else
+            else {
                 document.getElementById('table').innerHTML = xhr.responseText;
+                updateLabaSelectZachetForm();
+            }
         }
     };
 
     xhr.send(data);
 }
 
+function updateTeacherPage(){
+    updateSubjectSelect();
+    updateStudentSelectZachetForm();
+    updateLabaSelectZachetForm();
+}
+
 function addNewZachet(){
     var xhr = new XMLHttpRequest();
 
-    xhr.open("post", path+"/teacher/group/newZachet", true);
+    xhr.open("post", path+"/teacher/zachets/new", true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     var group_id = document.querySelector(".group-select").value;
     var subject_id = document.querySelector(".subject-select").value;
-    var student_id = document.querySelector("#student_idZachet").value;
-    var newZachetLabaId = document.querySelector("#labaIdZachet").value;
+    var student_id = document.querySelector(".student-select").value;
+    var newZachetLabaId = document.querySelector(".laba-select").value;
     var value = document.querySelector("#valueZachet").value;
     var surnameSearch = document.querySelector("#surnameFilter").value;
     var labaNumFilter = document.querySelector("#labaNumFilter").value;
@@ -64,21 +73,22 @@ function addNewZachet(){
         group_id:group_id,
         subject_id:subject_id,
         student_id:student_id,
-        newZachetLabaId:newZachetLabaId,
+        new_zachet_laba_id:newZachetLabaId,
         value:value,
-        surnameSearch:surnameSearch,
-        labaNumFilter:labaNumFilter
+        surname_search:surnameSearch,
+        laba_num_filter:labaNumFilter
     });
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             document.querySelector('.data').innerHTML = xhr.responseText;
+            updateLabaSelectZachetForm();
         }
     };
     xhr.send(data);
 }
 
 var prevValue = -1;
-function updateSubjectSelect(type){
+function updateSubjectSelect(){
     var groupSelect = document.querySelector(".group-select");
     var value = groupSelect.value;
     if (prevValue !== value) {
@@ -100,10 +110,8 @@ function updateSubjectSelect(type){
                     }
                 })
             })
+            .then(updateStudentSelectZachetForm)
             .catch(error => console.log(error));
-    }
-    if (type === 'teacher') {
-        updateStudentSelectZachetForm();
     }
 }
 
@@ -122,8 +130,9 @@ function updateStudentSelectZachetForm(){
                 studentSelect.appendChild(option);
             })
         })
+        .then(updateLabaSelectZachetForm)
         .catch(error => console.log(error));
-    updateLabaSelectZachetForm();
+
 }
 
 function updateLabaSelectZachetForm(){
@@ -136,13 +145,33 @@ function updateLabaSelectZachetForm(){
     fetch(path+'/api/subjects/'+subject_id+"/labas/"+student_id).then(res => res.json())
         .then(labas => {
             labas.forEach(laba => {
+                console.log(laba);
                 var option = document.createElement("option");
-                option.setAttribute("th:value", laba.id);
+                option.setAttribute("value", laba.id);
                 option.textContent = laba.number+") "+laba.title;
                 labaSelect.appendChild(option);
             })
         })
         .catch(error => console.log(error));
+}
+
+function sendExcelToEmail(){
+    var xhr = new XMLHttpRequest();
+    xhr.open("post", path+"/teacher/group/send/excel", true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    var subject_id = document.querySelector(".subject-select").value;
+    var group_id = document.querySelector(".group-select").value;
+    var data = JSON.stringify({
+        subject_id:subject_id,
+        group_id:group_id
+    })
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            document.querySelector('.data').innerHTML = xhr.responseText;
+            updateLabaSelectZachetForm();
+        }
+    };
+    xhr.send(data);
 }
 
 

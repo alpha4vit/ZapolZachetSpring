@@ -21,7 +21,9 @@ public class GroupMapper implements Mappable<Group, GroupDTO> {
 
     @Override
     public GroupDTO toDTO(Group entity) {
-        return modelMapper.map(entity, GroupDTO.class);
+        GroupDTO groupDTO = modelMapper.map(entity, GroupDTO.class);
+        groupDTO.setAveragePerformance(Math.round(entity.getAveragePerformance()*100)/100d);
+        return groupDTO;
     }
 
     @Override

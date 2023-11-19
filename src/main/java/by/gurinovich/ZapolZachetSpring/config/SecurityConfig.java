@@ -27,11 +27,6 @@ import java.io.IOException;
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
 
-    @Bean
-    public ModelMapper modelMapper(){
-        return new ModelMapper();
-    }
-
     @Autowired
     public SecurityConfig(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;

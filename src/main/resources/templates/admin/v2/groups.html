@@ -55,7 +55,7 @@
                                         <tr th:each="group : ${groups}">
                                             <td th:text="${group.getName()}" class="text-nowrap align-middle">Номер группы</td>
                                             <td th:text="${group.getStudents().size()}" class="text-nowrap align-middle"><span>31</span></td>
-                                            <td class="text-nowrap align-middle"><span>Успеваемость TODO</span></td>
+                                            <td th:text="${group.getAveragePerformance()}" class="text-nowrap align-middle"><span>Успеваемость TODO</span></td>
                                             <td class="text-center align-middle">
                                                 <div class="btn-group align-top">
                                                     <form th:action="@{/admin/groups/{id}/students(id=${group.getId()})}">

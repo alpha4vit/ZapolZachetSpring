@@ -30,6 +30,7 @@ public class StudentMapper implements Mappable<Student, StudentDTO> {
     @Override
     public StudentDTO toDTO(Student entity) {
         StudentDTO dto = modelMapper.map(entity, StudentDTO.class);
+        dto.setPerformance(Math.round(entity.getPerformance()*100)/100d);
         dto.setDateOfBirth(new SimpleDateFormat("yyyy-MM-dd").format(entity.getDateOfBirth()));
         return dto;
     }

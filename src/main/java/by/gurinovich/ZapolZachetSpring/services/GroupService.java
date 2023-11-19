@@ -1,6 +1,7 @@
 package by.gurinovich.ZapolZachetSpring.services;
 
 import by.gurinovich.ZapolZachetSpring.models.Group;
+import by.gurinovich.ZapolZachetSpring.models.Student;
 import by.gurinovich.ZapolZachetSpring.models.Subject;
 import by.gurinovich.ZapolZachetSpring.repositories.GroupRepository;
 import by.gurinovich.ZapolZachetSpring.repositories.StudentRepository;
@@ -25,7 +26,9 @@ public class GroupService {
 
     @Transactional
     public void update(Group group, Long groupId){
+        Group before = getById(groupId);
         group.setId(groupId);
+        group.setAveragePerformance(before.getAveragePerformance());
         groupRepository.save(group);
     }
 
@@ -33,6 +36,12 @@ public class GroupService {
         return groupRepository.findAll();
     }
 
+    @Transactional
+    public void updateAveragePerfomance(Group group){
+        Double sum = group.getStudents().stream().mapToDouble(Student::getPerformance).sum();
+        group.setAveragePerformance(sum/group.getStudents().size());
+        groupRepository.save(group);
+    }
 
     @Transactional
     public void deleteById(Long id) {
@@ -42,6 +51,7 @@ public class GroupService {
 
     @Transactional
     public void save(Group group){
+        group.setAveragePerformance(0.0);
         groupRepository.save(group);
     }
 

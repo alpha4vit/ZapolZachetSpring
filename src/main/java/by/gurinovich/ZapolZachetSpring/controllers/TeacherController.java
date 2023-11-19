@@ -4,6 +4,7 @@ import by.gurinovich.ZapolZachetSpring.DTO.GroupAndSubject;
 import by.gurinovich.ZapolZachetSpring.DTO.Request;
 import by.gurinovich.ZapolZachetSpring.models.*;
 import by.gurinovich.ZapolZachetSpring.services.*;
+import by.gurinovich.ZapolZachetSpring.services.senders.impls.ExcelSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ public class TeacherController {
     private final ZachetService zachetService;
     private final LabaService labaService;
     private final UserService userService;
+    private final ExcelSender excelSender;
 
 
     @GetMapping()
@@ -36,18 +38,7 @@ public class TeacherController {
         return "teachers/v2/choosePage";
     }
 
-//    @GetMapping("/group")
-//    public String showGroup(@ModelAttribute("groupANDsubject") GroupAndSubject groupAndSubject, Model model){
-//        User user = userService.getAuthenticatedUser();
-//        model.addAttribute("groups", groupService.getAll())
-//                .addAttribute("subjects", subjectService.getAll())
-//                .addAttribute("zachetModel", new ZachetModel())
-//                .addAttribute("zachetService", zachetService)
-//                .addAttribute("current_user", user);
-//        return "teachers/groupInfo";
-//    }
-
-    @PostMapping("/group/zachets/new")
+    @PostMapping("/zachets/new")
     public String newZachet(@RequestBody Request request, BindingResult bindingResult, Model model){
         Group group = groupService.getById(request.getGroupId());
         Subject subject = subjectService.getById(request.getSubjectId());
@@ -57,18 +48,18 @@ public class TeacherController {
                         .value(request.getValue())
                         .laba(labaService.getById(request.getNewZachetLabaId()))
                 .build());
+        studentService.updatePerfomance(student);
         List<Student> students = group.selectStudentsByFilter(request.getSurnameSearch(), request.getLabaNumFilter(), subject);
         if (students == null)
             students = group.getStudents();
         model.addAttribute("groupANDsubject", new GroupAndSubject(group, subject))
                 .addAttribute("students", students)
                 .addAttribute("zachetService", zachetService)
-                .addAttribute("request", request)
-                .addAttribute("zachetModel", new ZachetModel(student));
+                .addAttribute("request", request);
         return "users/v2/table";
     }
 
-    @PostMapping("group/select")
+    @PostMapping("/group/select")
     public String selectUser(Model model, @RequestBody Request request){
         Group group = groupService.getById(request.getGroupId());
         Subject subject = subjectService.getById(request.getSubjectId());
@@ -81,6 +72,17 @@ public class TeacherController {
                 .addAttribute("zachetModel", new ZachetModel())
                 .addAttribute("request", request);
         return "users/v2/table";
+    }
+
+    @PostMapping("/group/send/excel")
+    @ResponseBody
+    public void sendExcelToEmail(@RequestBody Request request){
+        if (request.getSubjectId() == null && request.getGroupId() != null){
+            excelSender.send(groupService.getById(request.getGroupId()));
+        }
+        else if (request.getGroupId() != null && request.getSubjectId() != null){
+            excelSender.send(groupService.getById(request.getGroupId()), subjectService.getById(request.getSubjectId()));
+        }
     }
 
 }

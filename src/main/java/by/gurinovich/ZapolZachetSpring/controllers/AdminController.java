@@ -6,7 +6,9 @@ import by.gurinovich.ZapolZachetSpring.DTO.StudentDTO;
 import by.gurinovich.ZapolZachetSpring.DTO.SubjectDTO;
 import by.gurinovich.ZapolZachetSpring.models.*;
 import by.gurinovich.ZapolZachetSpring.services.*;
+import by.gurinovich.ZapolZachetSpring.services.senders.impls.ExcelSender;
 import by.gurinovich.ZapolZachetSpring.utils.enums.Roles;
+import by.gurinovich.ZapolZachetSpring.utils.mappers.impl.GroupMapper;
 import by.gurinovich.ZapolZachetSpring.utils.mappers.impl.LabaMapper;
 import by.gurinovich.ZapolZachetSpring.utils.mappers.impl.StudentMapper;
 import by.gurinovich.ZapolZachetSpring.utils.mappers.impl.SubjectMapper;
@@ -35,12 +37,14 @@ public class AdminController {
     private final StudentMapper studentMapper;
     private final SubjectMapper subjectMapper;
     private final LabaMapper labaMapper;
+    private final GroupMapper groupMapper;
+    private final ExcelSender excelSender;
 
     @GetMapping("/groups")
     public String showAdminPage(Model model, @ModelAttribute("group") Group group){
         User user = userService.getAuthenticatedUser();
         model
-                .addAttribute("groups", groupService.getAll())
+                .addAttribute("groups", groupMapper.toDTOs(groupService.getAll()))
                 .addAttribute("current_user", user);
         return "admin/v2/groups";
     }
@@ -68,7 +72,7 @@ public class AdminController {
                 .addAttribute("group", group)
                 .addAttribute("current_user", user)
                 .addAttribute("available_subjects", subjectService.getAvailableSubjects(group));
-        return "/admin/v2/groupInfoSubjects";
+        return "admin/v2/groupInfoSubjects";
     }
 
     @PostMapping("/groups/{group_id}/subjects/add")
@@ -120,7 +124,7 @@ public class AdminController {
         model.addAttribute("group", group)
                 .addAttribute("current_user", user)
                 .addAttribute("students", studentMapper.toDTOs(group.getStudents()));
-        return "/admin/v2/groupInfoStudents";
+        return "admin/v2/groupInfoStudents";
     }
 
     @PostMapping("/groups/{group_id}/students/add")
