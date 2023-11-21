@@ -30,6 +30,12 @@ public class User implements UserDetails {
     @Column(name = "role")
     private String role;
 
+    @Column(name = "is_email_verified")
+    private boolean isEmailVerified;
+
+    @Column(name = "confirmation_code")
+    private String confirmationCode;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.role));

@@ -1,19 +1,22 @@
 package by.gurinovich.ZapolZachetSpring.config;
 
 import by.gurinovich.ZapolZachetSpring.models.User;
+import by.gurinovich.ZapolZachetSpring.services.UserService;
 import by.gurinovich.ZapolZachetSpring.services.auth.UserDetailsService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,13 +27,10 @@ import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
-
-    @Autowired
-    public SecurityConfig(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
 
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
@@ -40,32 +40,38 @@ public class SecurityConfig {
     public SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests()
-//                .requestMatchers("/teacher/**").hasAnyRole("TEACHER", "ADMIN")
-//                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/teacher/**").hasAnyRole("TEACHER", "ADMIN")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/auth/confirm").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/auth")
                 .loginProcessingUrl("/process_login")
-                .successHandler(new AuthenticationSuccessHandler() {
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-                        User user = (User) authentication.getPrincipal();
-                        switch (user.getRole()) {
-                            case "ROLE_USER" -> response.sendRedirect("/choosegroup");
-                            case "ROLE_TEACHER" ->  response.sendRedirect("/teacher");
-                            case "ROLE_ADMIN" -> response.sendRedirect("/admin/users");
-                        }
+                .successHandler((request, response, authentication) -> {
+                    User user = (User) authentication.getPrincipal();
+                    switch (user.getRole()) {
+                        case "ROLE_USER" -> response.sendRedirect("/choosegroup");
+                        case "ROLE_TEACHER" ->  response.sendRedirect("/teacher");
+                        case "ROLE_ADMIN" -> response.sendRedirect("/admin/users");
                     }
                 })
-                .failureHandler(new AuthenticationFailureHandler() {
-                    @Override
-                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-                        System.out.println(exception.getMessage());
-                        response.sendRedirect("/auth/login/error");
-                    }
+                .failureHandler((request, response, exception) -> {
+                    System.out.println(exception.getMessage());
+                    response.sendRedirect("/auth/login/error");
                 })
                 .and()
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                            if (user != null){
+                                if (!user.isEmailVerified()) {
+                                    response.sendRedirect("/auth/confirm");
+                                    return;
+                                }
+                            }
+                            response.sendRedirect("/auth");
+                        }))
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/auth");

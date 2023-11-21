@@ -1,3 +1,5 @@
+const path = "http://localhost:8080";
+
 const container = document.querySelector(".container"),
     pwShowHide = document.querySelectorAll(".showHidePw"),
     pwFields = document.querySelectorAll(".password"),
@@ -32,3 +34,9 @@ signUp.addEventListener("click", ( )=>{
 login.addEventListener("click", ( )=>{
     container.classList.remove("active");
 });
+
+function submitResend(){
+    var user_id = document.querySelector("#user-id").value;
+    fetch(path+'/auth/confirm/'+user_id+"/resend")
+        .catch(error => console.log(error));
+}

@@ -6,6 +6,7 @@ import by.gurinovich.ZapolZachetSpring.models.*;
 import by.gurinovich.ZapolZachetSpring.services.*;
 import by.gurinovich.ZapolZachetSpring.services.senders.impls.ExcelSender;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/teacher")
 @RequiredArgsConstructor
+@PreAuthorize("@customSecurityExpression.isEmailVerified()")
 public class TeacherController {
     private final GroupService groupService;
     private final SubjectService subjectService;

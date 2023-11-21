@@ -2,18 +2,22 @@ package by.gurinovich.ZapolZachetSpring.controllers;
 
 import by.gurinovich.ZapolZachetSpring.DTO.UserDTO;
 import by.gurinovich.ZapolZachetSpring.models.User;
+import by.gurinovich.ZapolZachetSpring.services.EmailService;
 import by.gurinovich.ZapolZachetSpring.services.UserService;
 import by.gurinovich.ZapolZachetSpring.utils.mappers.impl.UserMapper;
 import by.gurinovich.ZapolZachetSpring.utils.validotors.UserValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Properties;
 
 @Controller
 @RequestMapping("/auth")
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AuthController {
     private final UserValidator userValidator;
     private final UserService userService;
+    private final EmailService emailService;
 
     @GetMapping("")
     public String login(@ModelAttribute("user") UserDTO user){
@@ -39,13 +44,46 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public String registrationPage(@ModelAttribute("user") @Valid User user, BindingResult bindingResult){
+    public String registrationPage(@ModelAttribute("user") @Valid User user,
+                                   BindingResult bindingResult,
+                                   Model model){
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
             return "auth_v2/failed_registration";
         }
-        userService.save(user);
-        return "redirect:/auth";
+        model.addAttribute("user", userService.save(user));
+        return "auth_v2/code_confirm";
     }
+
+    @PreAuthorize("!@customSecurityExpression.isEmailVerified()")
+    @GetMapping("/confirm")
+    public String confirmEmailPage(Model model){
+        model.addAttribute("user", userService.getAuthenticatedUser());
+        return "auth_v2/code_confirm";
+    }
+
+    @PostMapping("/confirm/{user_id}")
+    public String confirmEmail(@PathVariable("user_id") Long userId,
+                               @RequestParam("code") String code,
+                               Model model) {
+        if (userService.enable(userService.getById(userId), code)) {
+            return "redirect:/auth";
+        }
+        else{
+            model.addAttribute("user", userService.getAuthenticatedUser())
+                    .addAttribute("conf_error", "Введен неверный код!");
+            return "auth_v2/code_confirm";
+        }
+    }
+
+    //@PreAuthorize("!@customSecurityExpression.isEmailVerified()")
+    @GetMapping("/confirm/{user_id}/resend")
+    @ResponseBody
+    public void resendConfirmationCode(@PathVariable("user_id") Long userId){
+        User user = userService.getById(userId);
+        userService.updateConfirmationCode(user);
+        emailService.sendRegistrationEmailMessage(user, new Properties());
+    }
+
 
 }
