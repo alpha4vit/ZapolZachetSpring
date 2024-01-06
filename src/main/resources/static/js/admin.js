@@ -1,5 +1,5 @@
-const path = "http://localhost:8080/admin"
-
+const path2 = "https://zapolzachet.onrender.com/admin"
+const path = "http://localhost:8080/admin";
 
 function saveNewQuant(){
     var quant = document.querySelector("#quant").value;

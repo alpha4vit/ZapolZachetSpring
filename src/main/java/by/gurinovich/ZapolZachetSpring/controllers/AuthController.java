@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,14 +45,16 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public String registrationPage(@ModelAttribute("user") @Valid User user,
+    public String registration(@ModelAttribute("user") @Valid User user,
                                    BindingResult bindingResult,
                                    Model model){
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
             return "auth_v2/failed_registration";
         }
-        model.addAttribute("user", userService.save(user));
+        User created = userService.save(user);
+        emailService.sendRegistrationEmailMessage(created, new Properties());
+        model.addAttribute("user", created);
         return "auth_v2/code_confirm";
     }
 
@@ -62,6 +65,7 @@ public class AuthController {
         return "auth_v2/code_confirm";
     }
 
+    @PreAuthorize("!@customSecurityExpression.isEmailVerified()")
     @PostMapping("/confirm/{user_id}")
     public String confirmEmail(@PathVariable("user_id") Long userId,
                                @RequestParam("code") String code,
@@ -70,13 +74,12 @@ public class AuthController {
             return "redirect:/auth";
         }
         else{
-            model.addAttribute("user", userService.getAuthenticatedUser())
+            model.addAttribute("user", userService.getById(userId))
                     .addAttribute("conf_error", "Введен неверный код!");
             return "auth_v2/code_confirm";
         }
     }
 
-    //@PreAuthorize("!@customSecurityExpression.isEmailVerified()")
     @GetMapping("/confirm/{user_id}/resend")
     @ResponseBody
     public void resendConfirmationCode(@PathVariable("user_id") Long userId){
@@ -85,5 +88,43 @@ public class AuthController {
         emailService.sendRegistrationEmailMessage(user, new Properties());
     }
 
+    @GetMapping("/password/reset/email")
+    public String resetPasswordSendEmailPage(){
+        return "auth_v2/emailFormForPasswordReset";
+    }
+
+    @PostMapping("/password/reset/email")
+    public String resetPasswordSendEmail(@RequestParam("email") String email, Model model) {
+        User user = userService.getByEmail(email);
+        if (user != null) {
+            emailService.sendPasswordResetMessage(user, new Properties());
+            model.addAttribute("complete", true);
+        } else {
+            model.addAttribute("error", true);
+        }
+        return "auth_v2/emailFormForPasswordResetAfter";
+    }
+
+    @GetMapping("/password/reset")
+    public String resetPasswordPage(@RequestParam("uuid") String uuid,
+                                    Model model){
+        model.addAttribute("user", userService.getByUUID(uuid))
+                .addAttribute("uuid", uuid);
+        return "auth_v2/resetPasswordPage";
+    }
+
+    @PostMapping("/password/reset")
+    public String resetPassword(@RequestParam("uuid") String uuid,
+                                @RequestParam("password") String password,
+                                @RequestParam("password_confirmation") String passwordConfirmation, Model model){
+        User user = userService.getByUUID(uuid);
+        if (user != null && passwordConfirmation.equals(password)){
+            userService.updatePassword(user, password);
+            return "redirect:/auth";
+        }
+        model.addAttribute("error", true)
+                .addAttribute("uuid", uuid);
+        return "auth_v2/resetPasswordPage";
+    }
 
 }

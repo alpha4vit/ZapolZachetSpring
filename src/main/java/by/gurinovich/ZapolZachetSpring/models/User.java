@@ -36,6 +36,9 @@ public class User implements UserDetails {
     @Column(name = "confirmation_code")
     private String confirmationCode;
 
+    @Column(name = "uuid")
+    private String UUID;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.role));

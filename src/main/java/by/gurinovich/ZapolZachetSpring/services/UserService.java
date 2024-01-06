@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +20,6 @@ import java.util.Properties;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EmailService emailService;
 
     public User getAuthenticatedUser(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -31,7 +31,7 @@ public class UserService {
     }
 
     public User getByEmail(String email){
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     public User getByName(String name){
@@ -64,16 +64,12 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("ROLE_USER");
         user.setConfirmationCode(generateCofirmationCode());
-        userRepository.save(user);
-        Thread th = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                emailService.sendRegistrationEmailMessage(user, new Properties());
-            }
-        });
-        th.start();
-        User created = userRepository.findByEmail(user.getEmail());
-        return created;
+        String uuid = UUID.randomUUID().toString();
+        while (userRepository.findByUUID(uuid).isPresent()){
+            uuid = UUID.randomUUID().toString();
+        }
+        user.setUUID(uuid);
+        return userRepository.save(user);
     }
 
     @Transactional
@@ -87,6 +83,16 @@ public class UserService {
         return false;
     }
 
+    public User getByUUID(String uuid){
+        return userRepository.findByUUID(uuid).orElse(null);
+    }
+
+    @Transactional
+    public void updatePassword(User user, String password){
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
     @Transactional
     public void updateConfirmationCode(User user){
         user.setConfirmationCode(generateCofirmationCode());
@@ -97,4 +103,5 @@ public class UserService {
         Integer code = (int)(1000+Math.random()*9000);
         return code.toString();
     }
+
 }

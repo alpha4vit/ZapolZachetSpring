@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class MailProperties {
     private String username;
     private String password;
-    private String confirmLink;
+    private String resetLink;
     private String host;
     private Integer port;
 }

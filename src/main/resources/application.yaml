@@ -27,6 +27,7 @@ spring:
     port: 587
     username: romatempforjet@gmail.com
     password: ydkl aobk ctcc jloj
+    resetLink: ${MAIL_RESET_LINK}
     properties:
       mail:
         smtp:

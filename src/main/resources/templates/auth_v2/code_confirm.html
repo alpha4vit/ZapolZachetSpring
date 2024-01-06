@@ -21,7 +21,7 @@
     <div class="form login">
       <span class="title">Подтверждение почты</span>
 
-      <form th:action="@{/auth/confirm/{user_id}(user_id=${user.getId()})}" method="post">
+      <form th:method="post" th:action="@{/auth/confirm/{user_id}(user_id=${user.getId()})}">
         <div class="input-field">
           <input id="code" name="code" type="text" placeholder="Код подтверждения" required>
           <i class="uil uil-envelope icon"></i>

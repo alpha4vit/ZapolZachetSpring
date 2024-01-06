@@ -1,3 +1,4 @@
+const path2 = "https://zapolzachet.onrender.com"
 const path = "http://localhost:8080"
 
 

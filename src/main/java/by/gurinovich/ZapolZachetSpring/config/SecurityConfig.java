@@ -42,7 +42,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/teacher/**").hasAnyRole("TEACHER", "ADMIN")
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/auth/confirm").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
@@ -63,6 +62,7 @@ public class SecurityConfig {
                 .and()
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            System.out.println("Access Denied.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
                             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                             if (user != null){
                                 if (!user.isEmailVerified()) {

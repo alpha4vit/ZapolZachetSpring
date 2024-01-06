@@ -40,7 +40,6 @@ public class AdminController {
     private final SubjectMapper subjectMapper;
     private final LabaMapper labaMapper;
     private final GroupMapper groupMapper;
-    private final ExcelSender excelSender;
 
     @GetMapping("/groups")
     public String showAdminPage(Model model, @ModelAttribute("group") Group group){
@@ -195,7 +194,6 @@ public class AdminController {
                                  @ModelAttribute("userForEdit") User user,
                                  @RequestParam("search") String search,
                                  Model model){
-        System.out.println(user);
         userService.update(user, id);
         model.addAttribute("users", userService.getByNameStartingWith(search))
                 .addAttribute("roles", Roles.values())

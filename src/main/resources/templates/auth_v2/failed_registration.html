@@ -21,7 +21,7 @@
 
     <!-- Registration Form -->
     <div class="form signup">
-      <span class="title">Registration</span>
+      <span class="title">Регистрация</span>
 
       <form th:object="${user}" th:method="post" th:action="@{/auth/registration}">
         <div class="input-field">
@@ -54,7 +54,7 @@
         <div class="checkbox-text">
           <div class="checkbox-content">
             <input type="checkbox" id="termCon">
-            <label for="termCon" class="text">I accepted all terms and conditions</label>
+            <label for="termCon" class="text">Я принимаю условия соглашения</label>
           </div>
         </div>
 
@@ -64,8 +64,8 @@
       </form>
 
         <div class="login-signup">
-                      <span class="text">Already a member?
-                          <a th:href="@{/auth}" class="text login-link">Login Now</a>
+                      <span class="text">Уже есть аккаунт?
+                          <a th:href="@{/auth}" class="text login-link">Авторизоваться</a>
                       </span>
       </div>
     </div>

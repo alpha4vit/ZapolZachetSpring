@@ -1,4 +1,5 @@
 const path = "http://localhost:8080";
+const path2 = "https://zapolzachet.onrender.com";
 
 const container = document.querySelector(".container"),
     pwShowHide = document.querySelectorAll(".showHidePw"),

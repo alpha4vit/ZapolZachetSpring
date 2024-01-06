@@ -8,26 +8,25 @@
 
     <!-- ===== Iconscout CSS ===== -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-
     <!-- ===== CSS ===== -->
     <link rel="stylesheet" th:href="@{/css/style-auth.css}">
 
-    <title>Registration</title>
+    <title>Регистрация</title>
 </head>
 <body>
 
 <div class="container">
     <div class="forms">
         <div class="form login">
-            <span class="title">Login</span>
+            <span class="title">Авторизация</span>
 
             <form th:action="@{/process_login}" method="post">
                 <div class="input-field">
-                    <input id="username" name="username" type="text" placeholder="Enter your email" required>
+                    <input id="username" name="username" type="text" placeholder="Введите имя пользователя" required>
                     <i class="uil uil-envelope icon"></i>
                 </div>
                 <div class="input-field">
-                    <input  name="password" type="password" class="password" placeholder="Enter your password" required>
+                    <input  name="password" type="password" class="password" placeholder="Введите пароль" required>
                     <i class="uil uil-lock icon"></i>
                     <i class="uil uil-eye-slash showHidePw"></i>
                 </div>
@@ -37,9 +36,9 @@
                 <div class="checkbox-text">
                     <div class="checkbox-content">
                         <input type="checkbox" id="logCheck">
-                        <label for="logCheck" class="text">Remember me</label>
+                        <label for="logCheck" class="text">Запомнить меня</label>
                     </div>
-                    <a href="#" class="text">Forgot password?</a>
+                    <a th:href="@{/auth/password/reset/email}" class="text">Забыли пароль?</a>
                 </div>
 
                 <div class="input-field button">
@@ -48,15 +47,15 @@
             </form>
 
             <div class="login-signup">
-                    <span class="text">Not a member?
-                        <a  class="text signup-link">Signup Now</a>
+                    <span class="text">Еще не зарегистрированы?
+                        <a  class="text signup-link">Зарегистрироваться</a>
                     </span>
             </div>
         </div>
 
         <!-- Registration Form -->
         <div class="form signup">
-            <span class="title">Registration</span>
+            <span class="title">Регистрация</span>
 
             <form th:object="${user}" th:method="post" th:action="@{/auth/registration}">
                 <div class="input-field">
@@ -75,7 +74,7 @@
                 <div class="checkbox-text">
                     <div class="checkbox-content">
                         <input type="checkbox" id="termCon">
-                        <label for="termCon" class="text">I accepted all terms and conditions</label>
+                        <label for="termCon" class="text">Я принимаю условия соглашения</label>
                     </div>
                 </div>
 
@@ -85,8 +84,8 @@
             </form>
 
             <div class="login-signup">
-                    <span class="text">Already a member?
-                        <a href="#" class="text login-link">Login Now</a>
+                    <span class="text">Уже есть аккаунт?
+                        <a href="#" class="text login-link">Авторизоваться!</a>
                     </span>
             </div>
         </div>

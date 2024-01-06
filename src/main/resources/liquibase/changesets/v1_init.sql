@@ -39,7 +39,8 @@ create table if not exists users(
     role varchar(20),
     date_of_registration date,
     is_email_verified boolean default false,
-    confirmation_code varchar(4)
+    confirmation_code varchar(4),
+    uuid varchar(36) unique
 );
 
 create table if not exists group_subject(
